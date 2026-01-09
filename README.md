@@ -1,16 +1,42 @@
-# React + Vite
+# SkyproWallet
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**SkyproWallet** — это веб-приложение для учёта личных расходов и анализа финансовых привычек. Проект разрабатывается в рамках учебного курса Skypro командой из четырёх студентов.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Основной функционал (Спринт 1)
 
-## React Compiler
+- Экран входа (`/login`)
+- Экран регистрации (`/register`)
+- Главная страница (`/`) — отображение расходов (верстка без логики)
+- Единый компонент `Header` на главной странице
+- Все экраны свёрстаны в соответствии с требованиями ТЗ
+- Используется `styled-components` для стилизации
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> 💡 На этапе Спринта 1 реализована только статическая верстка. Логика, API и аутентификация будут добавлены во 2-м спринте.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠 Технологии
+
+- **База**: Vite + React 19
+- **Стилизация**: `styled-components`
+- **Роутинг**: `react-router-dom`
+- **Управление кодом**: ESLint + Prettier
+- **Язык**: JavaScript (JSX)
+
+---
+
+## 📋 Доска задач
+
+Все задачи проекта отслеживаются в Kaiten:
+https://statika3k.kaiten.ru/space/711884/lists?sm=users&tab=form
+
+---
+
+## 👥 Участники
+
+Шаханова Нина
+Дудкин Виталий
+Калинина Настя
+Мильченко Вероника
