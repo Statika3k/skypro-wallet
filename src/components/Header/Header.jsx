@@ -11,7 +11,7 @@ import {
 export default function Header() {
   const location = useLocation();
   const isAuthPage =
-    location.pathname === "/login" || location.pathname === "/register";
+    location.pathname === '/login' || location.pathname === '/register';
 
   return (
     <StyledHeader>
@@ -22,7 +22,7 @@ export default function Header() {
 
         {!isAuthPage && (
           <>
-            <HeaderNav className="header_actions">
+            <HeaderNav className="header_actions _active">
               <NavLink
                 to="/"
                 className={location.pathname === '/' ? 'active' : ''}

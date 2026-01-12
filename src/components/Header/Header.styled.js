@@ -7,10 +7,12 @@ export const StyledHeader = styled.header`
 `;
 
 export const Container = styled.div`
+  max-width: 1440px;
   display: flex;
   align-items: center;
   height: 100%;
-  padding-left: 120px;
+  width: 100%;  
+  margin: 0 auto;
   justify-content: space-between;
 `;
 
@@ -42,7 +44,7 @@ export const NavLink = styled.div`
     color: #6a4bff;
     font-weight: 600;
     text-decoration: underline;
-    text-decoration-thickness: 2px;
+    text-decoration-thickness: 1px;
     text-underline-offset: 4px;
   }
 
