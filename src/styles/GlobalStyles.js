@@ -15,6 +15,7 @@ a {
 html, body {
   width: 100%;
   height: 100%;
-  font-family: "Montserrat" sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 `
+
