@@ -216,4 +216,13 @@ export const SFormButton = styled.button`
   line-height: 15px;
   letter-spacing: 0px;
   text-align: center;
+
+    &:hover {
+    background-color: rgba(115, 52, 234, 0.8);
+  }
+
+  &:active {
+    background-color: rgba(115, 52, 234, 0.6);
+    transform: translateY(1px); 
+  }
 `;
