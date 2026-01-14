@@ -17,4 +17,10 @@ html, body {
   height: 100%;
   font-family: "Montserrat", sans-serif;
 }
-`
+
+#root {
+  min-height: 100vh;
+  padding-left: calc(50% - 600px);
+  padding-right: calc(50% - 600px);
+}
+`;
