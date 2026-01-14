@@ -22,6 +22,7 @@ import {
   PeriodLabel,
   TotalAmount,
 } from "./CostAnalysis.styled";
+import Header from "../Header/Header";
 
 const monthNames = [
   "Январь",
@@ -135,7 +136,9 @@ export const Calendar = () => {
     handleDateClick
   );
 
-  return (
+  return ( 
+    <> 
+   <Header />
     <Page>
       <SectionTitle>Анализ расходов</SectionTitle>
       <CalendarChart>
@@ -251,6 +254,7 @@ export const Calendar = () => {
         </ChartContainer>
       </CalendarChart>
     </Page>
+    </>
   );
 };
 

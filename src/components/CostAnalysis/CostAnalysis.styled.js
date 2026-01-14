@@ -6,7 +6,6 @@ export const Page = styled.div`
 `;
 
 export const SectionTitle = styled.h1`
-  font-family: Montserrat;
   font-weight: bold;
   font-size: 32px;
   letter-spacing: 0px;
