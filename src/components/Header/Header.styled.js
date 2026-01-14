@@ -4,16 +4,16 @@ import styled from "styled-components";
 export const StyledHeader = styled.header`
   width: 100%;
   height: 64px;
-  background-color: #ffffff;
+  background-color: #ffffff;  
 `;
 
-export const Container = styled.div`
-  max-width: 1440px;
+export const Container = styled.div`  
   display: flex;
   align-items: center;
+  padding-left: 120px;
+  padding-right: 120px;
   height: 100%;
-  width: 100%;  
-  margin: 0 auto;
+  width: 100%;    
   justify-content: space-between;
 `;
 
