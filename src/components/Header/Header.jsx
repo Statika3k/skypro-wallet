@@ -11,7 +11,7 @@ import {
 export default function Header() {
   const location = useLocation();
   const isAuthPage =
-    location.pathname === '/login' || location.pathname === '/register';
+    location.pathname === "/login" || location.pathname === "/register";
 
   return (
     <StyledHeader>
@@ -23,15 +23,12 @@ export default function Header() {
         {!isAuthPage && (
           <>
             <HeaderNav className="header_actions _active">
-              <NavLink
-                to="/"
-                className={location.pathname === '/' ? 'active' : ''}
-              >
+              <NavLink to="/" $active={location.pathname === "/"}>
                 Мои расходы
               </NavLink>
               <NavLink
                 to="/analytics"
-                className={location.pathname === "/analytics" ? "active" : ""}
+                $active={location.pathname === "/analytics"}
               >
                 Анализ расходов
               </NavLink>
@@ -44,4 +41,3 @@ export default function Header() {
     </StyledHeader>
   );
 }
-
