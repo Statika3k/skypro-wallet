@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 export const Page = styled.div`
   padding: 100px 120px;
-  background: #fff;
 `;
 
 export const SectionTitle = styled.h1`
+  padding-bottom: 32px;
   font-weight: bold;
   font-size: 32px;
   letter-spacing: 0px;

@@ -16,6 +16,7 @@ html, body {
   width: 100%;
   height: 100%;
   font-family: "Montserrat", sans-serif;
+  background-color: #F4F5F6;
 }
 
 #root {
