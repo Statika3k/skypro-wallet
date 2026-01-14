@@ -3,7 +3,9 @@ import styled from 'styled-components';
 export const SMain = styled.main`
   width: 100%;
   min-height: 100vh;
-  background: rgba(244, 245, 246, 1);
+   padding-left: 120px;
+  padding-right: 120px;
+  margin-top: 36px;
 `;
 
 export const SPageTitle = styled.h1`
@@ -17,21 +19,13 @@ export const SPageTitle = styled.h1`
   line-height: 150%;
   letter-spacing: 0px;
   text-align: left;
-  margin: 20px;
-`;
-
-export const SWrapper = styled.div`
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 30px;
+  margin-bottom: 32px;
 `;
 
 export const SContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 34px;
-  padding: 20px;
+  gap: 34px;  
   width: 100%; 
   box-sizing: border-box;
 `;
@@ -50,8 +44,7 @@ export const SStyledTable = styled.table`
 `;
 
 export const TableHeaderCell = styled.th`
-  padding: 32px;
-  font-family: Montserrat;
+  padding: 32px;  
   font-style: Bold;
   font-size: 24px;
   font-weight: 700;
@@ -122,7 +115,7 @@ export const SStyledForm = styled.form`
 
 export const SFormTitle = styled.h2`
   color: rgba(0, 0, 0, 1);
-  font-family: Montserrat;
+  padding-bottom: 24px;
   font-style: Bold;
   font-size: 24px;
   font-weight: 700;
@@ -131,8 +124,7 @@ export const SFormTitle = styled.h2`
 `;
 
 export const SFormLabel = styled.label`
-  color: rgba(0, 0, 0, 1);
-  font-family: Montserrat;
+  color: rgba(0, 0, 0, 1);  
   font-style: SemiBold;
   font-size: 16px;
   font-weight: 600;
@@ -148,8 +140,7 @@ export const SFormInput = styled.input`
   background: transparent;
   border: 0.5px solid rgba(153, 153, 153, 1);
   border-radius: 6px;
-  font-size: 12px;
-  font-family: Montserrat;
+  font-size: 12px;  
   margin-bottom: 24px;
 
   &::placeholder{
@@ -184,8 +175,7 @@ export const CategoryItem = styled.div`
   border-radius: 30px;
   background: rgba(244, 245, 246, 1);
   width: fit-content;
-  color: rgba(0, 0, 0, 1);
-  font-family: Montserrat;
+  color: rgba(0, 0, 0, 1);  
   font-style: Regular;
   font-size: 12px;
   font-weight: 400;
