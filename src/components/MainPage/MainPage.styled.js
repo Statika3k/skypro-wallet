@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 
+export const SWrapper = styled.div`
+  max-width: 1200px; 
+  width: 100%;
+  margin: 0 auto; 
+  padding-left: 20px; 
+  padding-right: 20px;
+`;
+
 export const SMain = styled.main`
   width: 100%;
   min-height: 100vh;
-   padding-left: 120px;
-  padding-right: 120px;
   margin-top: 36px;
 `;
 

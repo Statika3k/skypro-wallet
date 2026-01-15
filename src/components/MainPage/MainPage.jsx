@@ -22,6 +22,7 @@ import {
   SStyledForm,
   SStyledTable,
   STableContainer,  
+  SWrapper,  
   TableHeaderCell,
 } from "./MainPage.styled";
 
@@ -29,6 +30,7 @@ function MainPage() {
   return (
     <>
     <Header />
+    <SWrapper>
       <SMain>        
           <SPageTitle>Мои расходы</SPageTitle>
           <SContainer>
@@ -117,7 +119,7 @@ function MainPage() {
                     </CategoryItem>
                   </CategoryContainer>
                   <SFormLabel>Дата</SFormLabel>
-                  <SFormInput type="text" placeholder="Введите дату" />
+                  <SFormInput type="date" placeholder="Введите дату" />
                   <SFormLabel>Сумма</SFormLabel>
                   <SFormInput type="number" placeholder="Введите сумму" />
                   <SFormButton>Добавить новый расход</SFormButton>
@@ -126,6 +128,7 @@ function MainPage() {
             </SFormContainer>
           </SContainer>        
       </SMain>
+    </SWrapper>
     </>
   );
 }

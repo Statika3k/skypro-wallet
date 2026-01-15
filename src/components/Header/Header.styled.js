@@ -10,11 +10,11 @@ export const StyledHeader = styled.header`
 export const Container = styled.div`  
   display: flex;
   align-items: center;
-  padding-left: 120px;
-  padding-right: 120px;
   height: 100%;
   width: 100%;    
   justify-content: space-between;
+  max-width: 1200px; 
+  margin: 0 auto;
 `;
 
 export const HeaderLogo = styled.div`
