@@ -17,7 +17,7 @@ export default function Header() {
     <StyledHeader>
       <Container>
         <HeaderLogo>
-          <img src="/images/Logo.png" alt="Logo" />
+          <img src="/images/Logo.svg" alt="Logo" />
         </HeaderLogo>
 
         {!isAuthPage && (
