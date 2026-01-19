@@ -1,8 +1,11 @@
 import styled from "styled-components";
 
 export const Page = styled.div`
-  padding: 100px 120px;
-  background: #fff;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 export const SectionTitle = styled.h1`
@@ -10,6 +13,7 @@ export const SectionTitle = styled.h1`
   font-weight: bold;
   font-size: 32px;
   letter-spacing: 0px;
+  padding-top: 24px;
 `;
 
 export const CalendarContainer = styled.div`
@@ -24,7 +28,6 @@ export const CalendarContainer = styled.div`
 export const CalendarStyled = styled.div`
   display: block;
   padding: 8px 33px;
-  width: 313px;
 `;
 
 export const CalendarTitle = styled.p`
@@ -32,20 +35,14 @@ export const CalendarTitle = styled.p`
   font-size: 24px;
   font-weight: 700;
   line-height: 1;
-  margin-bottom: 35px;
-`;
-export const CalendarNav = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #111;
+  padding: 16px 0;
 `;
 
 export const CalendarBlock = styled.div`
   display: block;
+  overflow-y: scroll;
+  padding: 8px;
+  scroll-behavior: smooth;
 `;
 
 export const CalendarDaysNames = styled.div`
@@ -76,7 +73,6 @@ export const CalendarMonth = styled.div`
   flex-direction: column;
   text-align: start;
   font-weight: 600;
-  text-align: start;
   color: #000;
   margin: 16px 0 8px;
   font-size: 16px;
@@ -112,7 +108,7 @@ export const CalendarContent = styled.div`
   margin-bottom: 12px;
   display: grid;
   grid-template-rows: auto 1fr;
-  height: 280px;
+  height: 381px;
 `;
 
 export const Block = styled.div`
@@ -124,10 +120,8 @@ export const Block = styled.div`
 export const CalendarCells = styled.div`
   display: flex;
   gap: 4px;
-  overflow-y: auto;
   height: 381px;
   padding: 8px 0;
-  scroll-behavior: smooth;
   flex-direction: column;
 
   &::-webkit-scrollbar {
@@ -186,6 +180,8 @@ export const SelectedPeriodIcon = styled.div`
 export const CalendarChart = styled.div`
   display: flex;
   gap: 32px;
+  width: 100%;
+  margin-top: 36px;
 `;
 export const ChartContainer = styled.div`
   width: 789px;
