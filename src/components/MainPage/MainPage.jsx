@@ -1,4 +1,6 @@
 
+import { useContext, useEffect, useState } from "react";
+import { TaskContext } from "../../context/TaskContext";
 import Header from "../Header/Header";
 import {
   CategoryContainer,
@@ -27,6 +29,35 @@ import {
 } from "./MainPage.styled";
 
 function MainPage() {
+  const {tasks, loadTasks, addTask, deleteTaskFromState, isLoading,} = useContext(TaskContext);
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [date, setDate] = useState('');
+  const [sum, setSum] = useState('');
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  const handleAddTask = async () => {
+    const newTask = {
+      description,
+      category,
+      date,
+      sum,
+    };
+    try {
+      await addTask(newTask);
+      await loadTasks();
+    } catch (err) {
+      console.error('Ошибка при добавлении:', err);
+    }
+  };
+
+  const handleDelete = (taskId) => {
+    deleteTaskFromState(taskId);
+  };
+
   return (
     <>
     <Header />
@@ -55,24 +86,19 @@ function MainPage() {
                   <SpacerRow />
                 </thead>
                 <tbody>
-                  <LineCell>
-                    <Cell>Пятерочка</Cell>
-                    <Cell>Еда</Cell>
-                    <Cell>03.07.2024</Cell>
-                    <Cell>3500</Cell>
+                {tasks?.map((task, index) => (
+  task && task.description ? (
+                  <LineCell key={task.id || index}>
+                    <Cell>{task.description}</Cell>
+                    <Cell>{task.category}</Cell>
+                    <Cell>{task.date}</Cell>
+                    <Cell>{task.sum}</Cell>
                     <Cell>
-                      <img src="/images/корзина.svg" alt="корзина" />
+                      <img src="/images/корзина.svg" alt="корзина" onClick={() => handleDelete(task._id)}/>
                     </Cell>
-                  </LineCell>
-                  <LineCell>
-                    <Cell>Яндекс Такси</Cell>
-                    <Cell>Транспорт</Cell>
-                    <Cell>03.07.2024</Cell>
-                    <Cell>730</Cell>
-                    <Cell>
-                      <CellImg src="/images/корзина.svg" alt="корзина" />
-                    </Cell>
-                  </LineCell>
+                  </LineCell>) : null
+))
+              }
                 </tbody>
               </SStyledTable>
             </STableContainer>
@@ -81,11 +107,22 @@ function MainPage() {
                 <SStyledForm>
                   <SFormTitle>Новый расход</SFormTitle>
                   <SFormLabel>Описание</SFormLabel>
-                  <SFormInput type="text" placeholder="Введите описание" />
+                  <SFormInput 
+                    type="text" 
+                    placeholder="Введите описание" 
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    />
                   <SFormLabel>Категория</SFormLabel>
                   <CategoryContainer>
                     <CategoryItem>
                       <CategoryImage src="images/еда.svg" alt="еда" />
+                      <input
+                        type="radio"
+                        name="category"
+                        value="еда"
+                        onChange={(e) => setCategory(e.target.value)}
+                      />
                       Еда
                     </CategoryItem>
                     <CategoryItem>
@@ -93,16 +130,34 @@ function MainPage() {
                         src="images/транспорт.svg"
                         alt="транспорт"
                       />
+                      <input
+                        type="radio"
+                        name="category"
+                        value="транспорт"
+                        onChange={(e) => setCategory(e.target.value)}
+                      />
                       Транспорт
                     </CategoryItem>
                     <CategoryItem>
                       <CategoryImage src="images/жилье.svg" alt="жилье" />
+                      <input
+                        type="radio"
+                        name="category"
+                        value="жилье"
+                        onChange={(e) => setCategory(e.target.value)}
+                      />
                       Жилье
                     </CategoryItem>
                     <CategoryItem>
                       <CategoryImage
                         src="images/развлечения.svg"
                         alt="развлечения"
+                      />
+                      <input
+                        type="radio"
+                        name="category"
+                        value="развлечения"
+                        onChange={(e) => setCategory(e.target.value)}
                       />
                       Развлечения
                     </CategoryItem>
@@ -111,18 +166,40 @@ function MainPage() {
                         src="images/образование.svg"
                         alt="образование"
                       />
+                      <input
+                        type="radio"
+                        name="category"
+                        value="образование"
+                        onChange={(e) => setCategory(e.target.value)}
+                      />
                       Образование
                     </CategoryItem>
                     <CategoryItem>
                       <CategoryImage src="images/другое.svg" alt="другое" />
+                      <input
+                        type="radio"
+                        name="category"
+                        value="другое"
+                        onChange={(e) => setCategory(e.target.value)}
+                      />
                       Другое
                     </CategoryItem>
                   </CategoryContainer>
                   <SFormLabel>Дата</SFormLabel>
-                  <SFormInput type="date" placeholder="Введите дату" />
+                  <SFormInput 
+                    type="date" 
+                    placeholder="Введите дату" 
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}  
+                    />
                   <SFormLabel>Сумма</SFormLabel>
-                  <SFormInput type="number" placeholder="Введите сумму" />
-                  <SFormButton>Добавить новый расход</SFormButton>
+                  <SFormInput 
+                    type="number" 
+                    placeholder="Введите сумму" 
+                    value={sum}
+                    onChange={(e) => setSum(e.target.value)}  
+                    />
+                  <SFormButton onClick={handleAddTask}>Добавить новый расход</SFormButton>
                 </SStyledForm>
               </SFormContent>
             </SFormContainer>
