@@ -9,9 +9,13 @@ import {
   AuthFormLogin,
   AuthFormSignIn,
 } from "./AuthForm.styled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signIn, signUp } from "../../services/authApi";
 
 export default function AuthForm({ isSignUp = false }) {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");  
+
   const [formData, setFormData] = useState({
     name: "",
     login: "",
@@ -21,10 +25,42 @@ export default function AuthForm({ isSignUp = false }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");      
+
+  try {
+      let user;
+
+      if (isSignUp) {
+        // Регистрация
+        user = await signUp({
+          login: formData.login.trim(),
+          name: formData.name.trim(),
+          password: formData.password,
+        });
+      } else {
+        // Вход
+        user = await signIn({
+          login: formData.login.trim(),
+          password: formData.password,
+        });
+      }
+
+      // Сохраняем данные
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("isAuth", "true");
+      localStorage.setItem("userLogin", user.login);
+      localStorage.setItem("userName", user.name);
+
+      
+      navigate("/");
+    } catch (err) {
+      setError(err.message || "Произошла ошибка. Попробуйте позже.");
+    } 
   };
 
   return (
@@ -41,7 +77,7 @@ export default function AuthForm({ isSignUp = false }) {
                 name="name"
                 placeholder="Имя"
                 value={formData.name}
-                onChange={handleChange}
+                onChange={handleChange}                
               />
             )}
             <AuthFormInput
@@ -49,15 +85,22 @@ export default function AuthForm({ isSignUp = false }) {
               name="login"
               placeholder="Эл. почта"
               value={formData.login}
-              onChange={handleChange}
+              onChange={handleChange}              
             />
             <AuthFormInput
               type="password"
               name="password"
               placeholder="Пароль"
               value={formData.password}
-              onChange={handleChange}
+              onChange={handleChange}              
             />
+
+            {error && (
+              <div style={{ color: "#F84D4D", fontSize: "12px", textAlign: "center" }}>
+                {error}
+              </div>
+            )}
+
             <AuthFormBtnEnter type="submit">
               <p>{isSignUp ? "Зарегистрироваться" : "Войти"}</p>
             </AuthFormBtnEnter>

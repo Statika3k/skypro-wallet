@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Container,
   HeaderLogo,
@@ -10,8 +10,18 @@ import {
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isAuth");
+    localStorage.removeItem("userLogin");
+    localStorage.removeItem("userName");
+
+    navigate("/login", { replace: true });
+  };
 
   return (
     <StyledHeader>
@@ -34,7 +44,7 @@ export default function Header() {
               </NavLink>
             </HeaderNav>
 
-            <LogoutButton onClick={() => {}}>Выйти</LogoutButton>
+            <LogoutButton onClick={handleLogout}>Выйти</LogoutButton>
           </>
         )}
       </Container>
