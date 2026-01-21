@@ -27,7 +27,7 @@ function formatDate(date) {
   return `${day} ${month}`;
 }
 
-const ChartComponent = ({ selectedDates = [] }) => {
+const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
   const hasDates = selectedDates.length > 0;
   const periodText = hasDates
     ? selectedDates.length === 1
@@ -36,6 +36,34 @@ const ChartComponent = ({ selectedDates = [] }) => {
           selectedDates[selectedDates.length - 1],
         )}`
     : "";
+
+  const categories = [
+    { name: "Еда", value: 45 },
+    { name: "Транспорт", value: 20 },
+    { name: "Жилье", value: 90 },
+    { name: "Развлечения", value: 10 },
+    { name: "Образование", value: 5 },
+    { name: "Другое", value: 30 },
+  ];
+
+  const categoryMap = {
+    Еда: 0,
+    Транспорт: 1,
+    Жилье: 2,
+    Развлечения: 3,
+    Образование: 4,
+    Другое: 5,
+  };
+
+  const defaultData = [0, 0, 0, 0, 0, 0];
+
+  const chartValues = periodData.reduce((acc, item) => {
+    const index = categoryMap[item.category];
+    if (index !== undefined) acc[index] = item.amount;
+    return acc;
+  }, defaultData);
+
+  const maxValue = Math.max(...chartValues, 1);
 
   return (
     <ChartContainer>
@@ -55,63 +83,36 @@ const ChartComponent = ({ selectedDates = [] }) => {
           viewBox="0 0 300 200"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <rect
-            x="-40"
-            y="75"
-            width="50"
-            height="128"
-            fill="rgba(217, 182, 255, 1)"
-            rx="4"
-          />
-          <rect
-            x="15"
-            y="35"
-            width="60"
-            height="165"
-            fill="rgba(255, 181, 61, 1)"
-            rx="4"
-          />
-          <rect
-            x="80"
-            y="195"
-            width="50"
-            height="4"
-            fill="rgba(110, 228, 254, 1)"
-            rx="4"
-          />
-          <rect
-            x="145"
-            y="0"
-            width="55"
-            height="200"
-            fill="rgba(176, 174, 255, 1)"
-            rx="4"
-          />
-          <rect
-            x="220"
-            y="195"
-            width="50"
-            height="4"
-            fill="rgba(188, 236, 48, 1)"
-            rx="4"
-          />
-          <rect
-            x="290"
-            y="15"
-            width="50"
-            height="185"
-            fill="rgba(255, 185, 184, 1)"
-            rx="4"
-          />
+          {chartValues.map((value, i) => {
+            const height = (value / maxValue) * 180;
+            const x = i * 45 + (45 - 30) / 2;
+            return (
+              <rect
+                key={i}
+                x={x}
+                y={200 - height}
+                width="30"
+                height={height}
+                fill={
+                  [
+                    "#d9b6ff",
+                    "#ffb53d",
+                    "#6ee4fe",
+                    "#b0b0ff",
+                    "#bcec30",
+                    "#ffb9b8",
+                  ][i]
+                }
+                rx="4"
+              />
+            );
+          })}
         </svg>
       </Chart>
       <ChartFooter>
-        <span>Еда</span>
-        <span>Транспорт</span>
-        <span>Жилье</span>
-        <span>Развлечения</span>
-        <span>Образование</span>
-        <span>Другое</span>
+        {categories.map((cat) => (
+          <span key={cat.name}>{cat.name}</span>
+        ))}
       </ChartFooter>
     </ChartContainer>
   );

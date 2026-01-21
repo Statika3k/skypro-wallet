@@ -132,14 +132,12 @@ const Calendar = ({ selectedDates, setSelectedDates }) => {
   return (
     <CalendarContainer>
       <CalendarStyled>
-        <div>
-          <CalendarTitle>Период</CalendarTitle>
-          <CalendarDaysNames>
-            {["пн", "вт", "ср", "чт", "пт", "сб", "вс"].map((day) => (
-              <DayName key={day}>{day}</DayName>
-            ))}
-          </CalendarDaysNames>
-        </div>
+        <CalendarTitle>Период</CalendarTitle>
+        <CalendarDaysNames>
+          {["пн", "вт", "ср", "чт", "пт", "сб", "вс"].map((day) => (
+            <DayName key={day}>{day}</DayName>
+          ))}
+        </CalendarDaysNames>
         <CalendarBlock>
           <CalendarContent>
             <CalendarCells>
