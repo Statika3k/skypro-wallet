@@ -12,9 +12,13 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, signUp } from "../../services/authApi";
 
+const isValidEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
 export default function AuthForm({ isSignUp = false }) {
   const navigate = useNavigate();
-  const [error, setError] = useState("");  
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -22,17 +26,48 @@ export default function AuthForm({ isSignUp = false }) {
     password: "",
   });
 
+  const [touched, setTouched] = useState({
+    name: false,
+    login: false,
+    password: false,
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setTouched((prev) => ({ ...prev, [name]: true }));
+
     if (error) setError("");
   };
 
+  const isLoginValid = formData.login === "" || isValidEmail(formData.login);
+  const isNameValid = !isSignUp ? formData.name.trim() !== "" : true;
+  const isPasswordValid =
+    formData.password === "" || formData.password.trim() !== "";
+
+  const hasInvalidTouchedField =
+    (touched.name && !isNameValid) ||
+    (touched.login && !isLoginValid) ||
+    (touched.password && !isPasswordValid);
+
+  const isFormDisabled = hasInvalidTouchedField;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");      
+    setTouched({ name: true, login: true, password: true });
 
-  try {
+    const finalLoginValid = isValidEmail(formData.login);
+    const finalNameValid = isSignUp ? formData.name.trim() !== "" : true;
+    const finalPasswordValid = formData.password.trim() !== "";
+
+    if (!finalLoginValid || !finalPasswordValid || !finalNameValid) {
+      setError(
+        "Упс! Введенные вами данные некорректны. Введите данные корректно и повторите попытку.",
+      );
+      return;
+    }
+
+    try {
       let user;
 
       if (isSignUp) {
@@ -56,11 +91,12 @@ export default function AuthForm({ isSignUp = false }) {
       localStorage.setItem("userLogin", user.login);
       localStorage.setItem("userName", user.name);
 
-      
       navigate("/");
-    } catch (err) {
-      setError(err.message || "Произошла ошибка. Попробуйте позже.");
-    } 
+    } catch {
+      setError(
+        "Упс! Введенные вами данные некорректны. Введите данные корректно и повторите попытку.",
+      );
+    }
   };
 
   return (
@@ -77,7 +113,9 @@ export default function AuthForm({ isSignUp = false }) {
                 name="name"
                 placeholder="Имя"
                 value={formData.name}
-                onChange={handleChange}                
+                onChange={handleChange}
+                $isValid={isNameValid}
+                $isTouched={touched.name}
               />
             )}
             <AuthFormInput
@@ -85,23 +123,33 @@ export default function AuthForm({ isSignUp = false }) {
               name="login"
               placeholder="Эл. почта"
               value={formData.login}
-              onChange={handleChange}              
+              onChange={handleChange}
+              $isValid={isLoginValid}
+              $isTouched={touched.login}
             />
             <AuthFormInput
               type="password"
               name="password"
               placeholder="Пароль"
               value={formData.password}
-              onChange={handleChange}              
+              onChange={handleChange}
+              $isValid={isPasswordValid}
+              $isTouched={touched.password}
             />
 
             {error && (
-              <div style={{ color: "#F84D4D", fontSize: "12px", textAlign: "center" }}>
+              <div
+                style={{
+                  color: "rgba(248, 77, 77, 1)",
+                  fontSize: "12px",
+                  textAlign: "center",
+                }}
+              >
                 {error}
               </div>
             )}
 
-            <AuthFormBtnEnter type="submit">
+            <AuthFormBtnEnter type="submit" $disabled={isFormDisabled}>
               <p>{isSignUp ? "Зарегистрироваться" : "Войти"}</p>
             </AuthFormBtnEnter>
             <AuthFormGroup>
