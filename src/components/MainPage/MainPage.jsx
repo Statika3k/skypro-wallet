@@ -38,10 +38,10 @@ function MainPage() {
   const [date, setDate] = useState('');
   const [sum, setSum] = useState('');
 
-  const [isDescriptionValid, setIsDescriptionValid] = useState(false);
-  const [isCategoryValid, setIsCategoryValid] = useState(false);
-  const [isDateValid, setIsDateValid] = useState(false);
-  const [isSumValid, setIsSumValid] = useState(false);
+  const [isDescriptionValid, setIsDescriptionValid] = useState(null);
+  const [isCategoryValid, setIsCategoryValid] = useState(null);
+  const [isDateValid, setIsDateValid] = useState(null);
+  const [isSumValid, setIsSumValid] = useState(null);
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
@@ -49,21 +49,30 @@ function MainPage() {
   }, []);
 
   useEffect(() => {
-    const descriptionValid = description.trim().length >= 4;
-    setIsDescriptionValid(descriptionValid);
+  const descriptionValid = description.trim().length >= 4;
+  setIsDescriptionValid(description.trim().length === 0 ? null : descriptionValid);
 
-    const categoryValid = ['food', 'transport', 'housing', 'joy', 'education', 'others'].includes(category);
-    setIsCategoryValid(categoryValid);
+  const categoryValid = ['food', 'transport', 'housing', 'joy', 'education', 'others'].includes(category);
+  setIsCategoryValid(category === '' ? null : categoryValid);
 
-    const dateValid = !isNaN(new Date(date).getTime());
-    setIsDateValid(dateValid);
+  const dateValid = !isNaN(new Date(date).getTime());
+  setIsDateValid(date === '' ? null : dateValid);
 
-    const sumNumber = parseFloat(sum);
-    const sumValid = !isNaN(sumNumber) && sumNumber > 0;
-    setIsSumValid(sumValid);
+  const sumNumber = parseFloat(sum);
+  const sumValid = !isNaN(sumNumber) && sumNumber > 0;
+  setIsSumValid(sum === '' ? null : sumValid);
 
-    setIsFormValid(descriptionValid && categoryValid && dateValid && sumValid);
-  }, [description, category, date, sum]);
+  if (
+    description.trim().length >= 4 &&
+    ['food', 'transport', 'housing', 'joy', 'education', 'others'].includes(category) &&
+    !isNaN(new Date(date).getTime()) &&
+    sumNumber > 0
+  ) {
+    setIsFormValid(true);
+  } else {
+    setIsFormValid(false);
+  }
+}, [description, category, date, sum]);
 
   const handleAddTask = async (e) => {
   e.preventDefault();
