@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   AuthFormBlock,
   AuthFormBtnEnter,
@@ -11,10 +11,12 @@ import {
 } from "./AuthForm.styled";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, signUp } from "../../services/authApi";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function AuthForm({ isSignUp = false }) {
   const navigate = useNavigate();
-  const [error, setError] = useState("");  
+  const { updateUserInfo } = useContext(AuthContext);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -30,9 +32,9 @@ export default function AuthForm({ isSignUp = false }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");      
+    setError("");
 
-  try {
+    try {
       let user;
 
       if (isSignUp) {
@@ -50,17 +52,18 @@ export default function AuthForm({ isSignUp = false }) {
         });
       }
 
-      // Сохраняем данные
-      localStorage.setItem("token", user.token);
-      localStorage.setItem("isAuth", "true");
-      localStorage.setItem("userLogin", user.login);
-      localStorage.setItem("userName", user.name);
+      updateUserInfo({
+        login: user.login,
+        name: user.name,
+        token: user.token,
+      });
 
-      
       navigate("/");
-    } catch (err) {
-      setError(err.message || "Произошла ошибка. Попробуйте позже.");
-    } 
+    } catch {
+      setError(
+        "Упс! Введенные вами данные некорректны. Введите данные корректно и повторите попытку.",
+      );
+    }
   };
 
   return (
@@ -77,7 +80,7 @@ export default function AuthForm({ isSignUp = false }) {
                 name="name"
                 placeholder="Имя"
                 value={formData.name}
-                onChange={handleChange}                
+                onChange={handleChange}
               />
             )}
             <AuthFormInput
@@ -85,18 +88,24 @@ export default function AuthForm({ isSignUp = false }) {
               name="login"
               placeholder="Эл. почта"
               value={formData.login}
-              onChange={handleChange}              
+              onChange={handleChange}
             />
             <AuthFormInput
               type="password"
               name="password"
               placeholder="Пароль"
               value={formData.password}
-              onChange={handleChange}              
+              onChange={handleChange}
             />
 
             {error && (
-              <div style={{ color: "#F84D4D", fontSize: "12px", textAlign: "center" }}>
+              <div
+                style={{
+                  color: "#F84D4D",
+                  fontSize: "12px",
+                  textAlign: "center",
+                }}
+              >
                 {error}
               </div>
             )}
