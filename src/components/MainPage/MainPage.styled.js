@@ -143,8 +143,8 @@ export const SFormInput = styled.input`
   outline: none;
   padding: 12px;
   color: #000;
-  background: transparent;
-  border: 0.5px solid rgba(153, 153, 153, 1);
+  border: 0.5px solid ${(props) => (props.$isValid ? 'rgba(115, 52, 234, 1)' : 'rgba(242, 80, 80, 1)')};
+  background-color: ${(props) => (props.$isValid ? 'rgba(241, 235, 253, 1)' : 'rgba(255, 235, 235, 1)')};
   border-radius: 6px;
   font-size: 12px;  
   margin-bottom: 24px;
@@ -179,9 +179,10 @@ export const CategoryItem = styled.div`
   align-items: center;
   padding: 10px 20px;
   border-radius: 30px;
-  background: rgba(244, 245, 246, 1);
+  background: ${(props) => (props.$isActive ? 'rgba(241, 235, 253, 1)' : 'rgba(244, 245, 246, 1)')};
   width: fit-content;
-  color: rgba(0, 0, 0, 1);  
+  color: ${(props) => (props.$isActive ? ' rgba(115, 52, 234, 1)' : 'rgba(0, 0, 0, 1)')};
+  cursor: pointer; 
   font-style: Regular;
   font-size: 12px;
   font-weight: 400;
@@ -199,11 +200,11 @@ export const SFormButton = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 12;
+  gap: 12px;
   padding: 12px;
-  border: 0.5px solid rgba(115, 52, 234, 1);
+  border: 0.5px solid ${(props) => (props.$isActive ? 'rgba(115, 52, 234, 1)' : 'rgba(153, 153, 153, 1)')};
   border-radius: 6px;
-  background: rgba(115, 52, 234, 1);
+  background: ${(props) => (props.$isActive ? 'rgba(115, 52, 234, 1)' : 'rgba(153, 153, 153, 1)')};
   color: rgba(255, 255, 255, 1);
   font-family: Montserrat;
   font-style: SemiBold;
@@ -212,13 +213,16 @@ export const SFormButton = styled.button`
   line-height: 15px;
   letter-spacing: 0px;
   text-align: center;
+  cursor: ${(props) => (props.$isActive ? 'pointer' : 'not-allowed')};
+  opacity: ${(props) => (props.$isActive ? 1 : 0.6)};
+  margin-top: 24px;
 
-    &:hover {
-    background-color: rgba(115, 52, 234, 0.8);
+  &:hover {
+    background-color: ${(props) => (props.$isActive ? 'rgba(115, 52, 234, 0.8)' : 'rgba(153, 153, 153, 1)')};
   }
 
   &:active {
-    background-color: rgba(115, 52, 234, 0.6);
-    transform: translateY(1px); 
+    background-color: ${(props) => (props.$isActive ? 'rgba(115, 52, 234, 0.6)' : 'rgba(153, 153, 153, 1)')};
+    transform: translateY(1px);
   }
 `;

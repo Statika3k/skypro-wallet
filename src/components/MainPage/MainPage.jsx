@@ -1,5 +1,7 @@
 
+import { useContext, useEffect, useState } from "react";
 import Header from "../Header/Header";
+import { TaskContext } from "../../context/TaskContext";
 import {
   CategoryContainer,
   CategoryImage,
@@ -25,8 +27,92 @@ import {
   SWrapper,  
   TableHeaderCell,
 } from "./MainPage.styled";
+import { deleteTask } from "../../services/api";
+
+
 
 function MainPage() {
+ const {tasks, loadTasks, addTask, deleteTaskFromState, isLoading,} = useContext(TaskContext);
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [date, setDate] = useState('');
+  const [sum, setSum] = useState('');
+
+  const [isDescriptionValid, setIsDescriptionValid] = useState(false);
+  const [isCategoryValid, setIsCategoryValid] = useState(false);
+  const [isDateValid, setIsDateValid] = useState(false);
+  const [isSumValid, setIsSumValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  useEffect(() => {
+    const descriptionValid = description.trim().length >= 4;
+    setIsDescriptionValid(descriptionValid);
+
+    const categoryValid = ['food', 'transport', 'housing', 'joy', 'education', 'others'].includes(category);
+    setIsCategoryValid(categoryValid);
+
+    const dateValid = !isNaN(new Date(date).getTime());
+    setIsDateValid(dateValid);
+
+    const sumNumber = parseFloat(sum);
+    const sumValid = !isNaN(sumNumber) && sumNumber > 0;
+    setIsSumValid(sumValid);
+
+    setIsFormValid(descriptionValid && categoryValid && dateValid && sumValid);
+  }, [description, category, date, sum]);
+
+  const handleAddTask = async (e) => {
+  e.preventDefault();
+    console.log("Клик по кнопке");
+    const newTask = {
+      description,
+      category,
+      date,
+      sum,
+    };
+    try {
+      await addTask(newTask);
+      await loadTasks();
+      setDescription('');
+      setCategory('');
+      setDate('');
+      setSum('');
+    } catch (err) {
+      console.error('Ошибка при добавлении:', err);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      await deleteTask(taskId);
+      deleteTaskFromState(taskId);
+    } catch (err) {
+      console.error('Ошибка при удалении:', err);
+    }
+  };
+
+  function formatDate(isoString) {
+    if (!isoString) return '';
+    const dateObj = new Date(isoString);
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  const categoryNames = {
+    food: 'Еда',
+    transport: 'Транспорт',
+    housing: 'Жилье',
+    joy: 'Развлечения',
+    education: 'Образование',
+    others: 'Другое',
+  };
+
   return (
     <>
     <Header />
@@ -55,24 +141,19 @@ function MainPage() {
                   <SpacerRow />
                 </thead>
                 <tbody>
-                  <LineCell>
-                    <Cell>Пятерочка</Cell>
-                    <Cell>Еда</Cell>
-                    <Cell>03.07.2024</Cell>
-                    <Cell>3500</Cell>
-                    <Cell>
-                      <img src="/images/корзина.svg" alt="корзина" />
-                    </Cell>
-                  </LineCell>
-                  <LineCell>
-                    <Cell>Яндекс Такси</Cell>
-                    <Cell>Транспорт</Cell>
-                    <Cell>03.07.2024</Cell>
-                    <Cell>730</Cell>
-                    <Cell>
-                      <CellImg src="/images/корзина.svg" alt="корзина" />
-                    </Cell>
-                  </LineCell>
+                  {tasks?.map((task, index) => (
+                    task && task.description ? (
+                      <LineCell key={task.id || index}>
+                        <Cell>{task.description}</Cell>
+                        <Cell>{categoryNames[task.category] || task.category}</Cell>
+                        <Cell>{formatDate(task.date)}</Cell>
+                        <Cell>{task.sum}</Cell>
+                        <Cell>
+                          <img src="/images/корзина.svg" alt="корзина" onClick={() => handleDelete(task._id)}/>
+                        </Cell>
+                      </LineCell>) : null
+                      ))
+                  }
                 </tbody>
               </SStyledTable>
             </STableContainer>
@@ -81,48 +162,75 @@ function MainPage() {
                 <SStyledForm>
                   <SFormTitle>Новый расход</SFormTitle>
                   <SFormLabel>Описание</SFormLabel>
-                  <SFormInput type="text" placeholder="Введите описание" />
-                  <SFormLabel>Категория</SFormLabel>
-                  <CategoryContainer>
-                    <CategoryItem>
-                      <CategoryImage src="images/еда.svg" alt="еда" />
+                  <SFormInput 
+                    type="text" 
+                    placeholder="Введите описание" 
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    $isValid={isDescriptionValid}
+                    />
+                  <SFormLabel>Категория {category === '' && <span style={{color: 'red', marginLeft: '4px'}}>*</span>}</SFormLabel>
+                 <CategoryContainer>
+                    <CategoryItem
+                      $isActive={category === 'food'}
+                      onClick={() => setCategory('food')}
+                    >
+                      <CategoryImage src="images/еда.svg" alt="еда"/>
                       Еда
                     </CategoryItem>
-                    <CategoryItem>
-                      <CategoryImage
-                        src="images/транспорт.svg"
-                        alt="транспорт"
-                      />
+                    <CategoryItem
+                      $isActive={category === 'transport'}
+                      onClick={() => setCategory('transport')}
+                    >
+                      <CategoryImage src="images/транспорт.svg" alt="транспорт" />
                       Транспорт
                     </CategoryItem>
-                    <CategoryItem>
+                    <CategoryItem
+                      $isActive={category === 'housing'}
+                      onClick={() => setCategory('housing')}
+                    >
                       <CategoryImage src="images/жилье.svg" alt="жилье" />
                       Жилье
                     </CategoryItem>
-                    <CategoryItem>
-                      <CategoryImage
-                        src="images/развлечения.svg"
-                        alt="развлечения"
-                      />
+                    <CategoryItem
+                      $isActive={category === 'joy'}
+                      onClick={() => setCategory('joy')}
+                    >
+                      <CategoryImage src="images/развлечения.svg" alt="развлечения" />
                       Развлечения
                     </CategoryItem>
-                    <CategoryItem>
-                      <CategoryImage
-                        src="images/образование.svg"
-                        alt="образование"
-                      />
+                    <CategoryItem
+                      $isActive={category === 'education'}
+                      onClick={() => setCategory('education')}
+                    >
+                      <CategoryImage src="images/образование.svg" alt="образование" />
                       Образование
                     </CategoryItem>
-                    <CategoryItem>
+                    <CategoryItem
+                      $isActive={category === 'others'}
+                      onClick={() => setCategory('others')}
+                    >
                       <CategoryImage src="images/другое.svg" alt="другое" />
                       Другое
                     </CategoryItem>
                   </CategoryContainer>
                   <SFormLabel>Дата</SFormLabel>
-                  <SFormInput type="date" placeholder="Введите дату" />
+                  <SFormInput 
+                    type="date" 
+                    placeholder="Введите дату" 
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}  
+                    $isValid={isDateValid}
+                    />
                   <SFormLabel>Сумма</SFormLabel>
-                  <SFormInput type="number" placeholder="Введите сумму" />
-                  <SFormButton>Добавить новый расход</SFormButton>
+                  <SFormInput 
+                    type="number" 
+                    placeholder="Введите сумму" 
+                    value={sum}
+                    onChange={(e) => setSum(e.target.value)}  
+                    $isValid={isSumValid}
+                    />
+                  <SFormButton type="button" onClick={handleAddTask} $isActive={isFormValid} disabled={!isFormValid}>Добавить новый расход</SFormButton>
                 </SStyledForm>
               </SFormContent>
             </SFormContainer>
