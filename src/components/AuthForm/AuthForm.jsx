@@ -79,6 +79,7 @@ export default function AuthForm({ isSignUp = false }) {
       );
       return;
     }
+    
 
     try {
       let user;
