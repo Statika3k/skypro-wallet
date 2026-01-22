@@ -17,7 +17,7 @@ export const ChartHeader = styled.div`
 
 export const ChartTabs = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 24px;
   flex-direction: column;
 `;
 
@@ -41,15 +41,7 @@ export const TotalAmount = styled.div`
 `;
 
 export const Chart = styled.div`
-  width: 732px;
+  width: 725px;
   height: 387px;
-`;
-
-export const ChartFooter = styled.div`
-  display: flex;
-  gap: 32px;
-  font-size: 12px;
-  color: #888;
-  margin-top: 8px;
-  justify-content: space-around;
+  margin: 0 auto;
 `;
