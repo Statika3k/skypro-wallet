@@ -3,7 +3,6 @@ import {
   ChartHeader,
   ChartTabs,
   Chart,
-  ChartFooter,
   PeriodLabel,
   TotalAmount,
 } from "./Chart.styled";
@@ -27,8 +26,23 @@ function formatDate(date) {
   return `${day} ${month}`;
 }
 
+const formatNumber = (num) => {
+  const intNum = Math.round(num);
+  return intNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
+
+const categories = [
+  { name: "Еда", color: "#d9b6ff" },
+  { name: "Транспорт", color: "#ffb53d" },
+  { name: "Жилье", color: "#6ee4fe" },
+  { name: "Развлечения", color: "#b0b0ff" },
+  { name: "Образование", color: "#bcec30" },
+  { name: "Другое", color: "#ffb9b8" },
+];
+
 const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
   const hasDates = selectedDates.length > 0;
+
   const periodText = hasDates
     ? selectedDates.length === 1
       ? formatDate(selectedDates[0])
@@ -37,40 +51,35 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
         )}`
     : "";
 
-  const categories = [
-    { name: "Еда", value: 45 },
-    { name: "Транспорт", value: 20 },
-    { name: "Жилье", value: 90 },
-    { name: "Развлечения", value: 10 },
-    { name: "Образование", value: 5 },
-    { name: "Другое", value: 30 },
-  ];
+  const values = categories.map((category) => {
+    const data = periodData.find((item) => item.category === category.name);
+    return data ? Math.round(data.amount) : 0;
+  });
 
-  const categoryMap = {
-    Еда: 0,
-    Транспорт: 1,
-    Жилье: 2,
-    Развлечения: 3,
-    Образование: 4,
-    Другое: 5,
-  };
+  const totalAmount = values.reduce((sum, val) => sum + val, 0);
+  const formattedTotal = hasDates ? `${formatNumber(totalAmount)} ₽` : "0 ₽";
 
-  const defaultData = [0, 0, 0, 0, 0, 0];
+  const maxValue = Math.max(...values, 1);
 
-  const chartValues = periodData.reduce((acc, item) => {
-    const index = categoryMap[item.category];
-    if (index !== undefined) acc[index] = item.amount;
-    return acc;
-  }, defaultData);
+  const barWidth = 94;
+  const gap = 32;
 
-  const maxValue = Math.max(...chartValues, 1);
+  const chartWidth = 725;
+  const chartHeight = 387;
+
+  const graphTop = 40;
+  const categoryLabelGap = 12;
+
+  const graphHeight = chartHeight - graphTop;
+
+  const startX = (chartWidth - (barWidth + gap) * categories.length + gap) / 2;
+  const labelY = graphTop + graphHeight + categoryLabelGap;
 
   return (
     <ChartContainer>
       <ChartHeader>
         <ChartTabs>
-          <PeriodLabel> ₽</PeriodLabel>
-
+          <PeriodLabel>{formattedTotal}</PeriodLabel>
           <TotalAmount>
             {hasDates ? `Расходы за ${periodText}` : "Период не выбран"}
           </TotalAmount>
@@ -80,41 +89,57 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
         <svg
           width="100%"
           height="100%"
-          viewBox="0 0 300 200"
+          viewBox={`0 0 ${chartWidth} ${chartHeight + 30}`}
           xmlns="http://www.w3.org/2000/svg"
         >
-          {chartValues.map((value, i) => {
-            const height = (value / maxValue) * 180;
-            const x = i * 45 + (45 - 30) / 2;
+          {values.map((value, i) => {
+            const x = startX + i * (barWidth + gap);
+            const height = maxValue > 0 ? (value / maxValue) * graphHeight : 0;
+            const y = graphTop + (graphHeight - height);
+
+            const textX = x + barWidth / 2;
+            const textY = y - 10;
+
             return (
-              <rect
-                key={i}
-                x={x}
-                y={200 - height}
-                width="30"
-                height={height}
-                fill={
-                  [
-                    "#d9b6ff",
-                    "#ffb53d",
-                    "#6ee4fe",
-                    "#b0b0ff",
-                    "#bcec30",
-                    "#ffb9b8",
-                  ][i]
-                }
-                rx="4"
-              />
+              <g key={categories[i].name}>
+                {value > 0 && (
+                  <text
+                    x={textX}
+                    y={textY}
+                    textAnchor="middle"
+                    fontSize="10"
+                    fill="#111"
+                    fontWeight="600"
+                  >
+                    {formatNumber(value)} ₽
+                  </text>
+                )}
+                <rect
+                  x={x}
+                  y={y}
+                  width={barWidth}
+                  height={height}
+                  fill={categories[i].color}
+                  rx="8"
+                />
+                <text
+                  x={textX}
+                  y={labelY}
+                  textAnchor="middle"
+                  fontSize="12"
+                  fill="#94a6be"
+                  fontWeight="600"
+                  dominantBaseline="hanging"
+                >
+                  {categories[i].name}
+                </text>
+              </g>
             );
           })}
         </svg>
       </Chart>
-      <ChartFooter>
-        {categories.map((cat) => (
-          <span key={cat.name}>{cat.name}</span>
-        ))}
-      </ChartFooter>
     </ChartContainer>
   );
 };
+
 export default ChartComponent;
