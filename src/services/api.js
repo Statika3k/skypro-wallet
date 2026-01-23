@@ -28,11 +28,11 @@ export async function addTasks(taskData) {
   }
 
   const dateObj = new Date(taskData.date);
-  const month = dateObj.getMonth() + 1; // 1-12
-  const day = dateObj.getDate();        // 1-31
+  const month = dateObj.getMonth() + 1; 
+  const day = dateObj.getDate();        
   const year = dateObj.getFullYear();
 
-  const formattedDate = `${month}-${day}-${year}`; // формат M-D-YYYY
+  const formattedDate = `${month}-${day}-${year}`; 
 
   const data = {
     description: taskData.description,
