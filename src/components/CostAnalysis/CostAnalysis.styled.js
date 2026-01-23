@@ -7,17 +7,22 @@ export const Page = styled.div`
 `;
 
 export const SectionTitle = styled.h1`
-  font-family: Montserrat;
   font-weight: bold;
   font-size: 32px;
   letter-spacing: 0px;
-  padding-top: 24px;
+  padding-top: 32px;
+  padding-bottom: 32px;
   margin: 0;
 `;
 
 export const CalendarChart = styled.div`
   display: flex;
   gap: 32px;
-  width: 100%;
-  margin-top: 36px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;

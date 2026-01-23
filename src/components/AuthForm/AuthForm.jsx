@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   AuthFormBlock,
   AuthFormBtnEnter,
@@ -11,10 +11,16 @@ import {
 } from "./AuthForm.styled";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, signUp } from "../../services/authApi";
+import { AuthContext } from "../../context/AuthContext";
+
+const isValidEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
 
 export default function AuthForm({ isSignUp = false }) {
   const navigate = useNavigate();
-  const [error, setError] = useState("");  
+  const { updateUserInfo } = useContext(AuthContext);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -22,17 +28,60 @@ export default function AuthForm({ isSignUp = false }) {
     password: "",
   });
 
+  const [touched, setTouched] = useState({
+    name: false,
+    login: false,
+    password: false,
+  });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));    
     if (error) setError("");
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;    
+      setTouched((prev) => ({ ...prev, [name]: true }));
+    
+  };
+
+  const isNameValid = formData.name.trim() !== "";
+  const isLoginValid = formData.login.trim() !== "" && isValidEmail(formData.login);
+  const isPasswordValid = formData.password.trim() !== "";
+
+  const hasNameError = isSignUp && touched.name && !isNameValid;
+  const hasLoginError = touched.login && !isLoginValid;
+  const hasPasswordError = touched.password && !isPasswordValid;
+
+  const isFormValid = () => {
+    if (!formData.login.trim() || !isValidEmail(formData.login)) return false;
+    if (!formData.password.trim()) return false;
+    if (isSignUp && !formData.name.trim()) return false;
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");      
+    setIsSubmitted(true);
 
-  try {
+    setTouched({
+      name: isSignUp,
+      login: true,
+      password: true,
+    });
+
+    if (!isFormValid()) {
+      setError(
+        "Упс! Введенные вами данные некорректны. Введите данные корректно и повторите попытку.",
+      );
+      return;
+    }
+    
+
+    try {
       let user;
 
       if (isSignUp) {
@@ -50,18 +99,21 @@ export default function AuthForm({ isSignUp = false }) {
         });
       }
 
-      // Сохраняем данные
-      localStorage.setItem("token", user.token);
-      localStorage.setItem("isAuth", "true");
-      localStorage.setItem("userLogin", user.login);
-      localStorage.setItem("userName", user.name);
+      updateUserInfo({
+        login: user.login,
+        name: user.name,
+        token: user.token,
+      });
 
-      
       navigate("/");
-    } catch (err) {
-      setError(err.message || "Произошла ошибка. Попробуйте позже.");
-    } 
+    } catch {
+      setError(
+        "Упс! Введенные вами данные некорректны. Введите данные корректно и повторите попытку.",
+      );
+    }
   };
+
+  const isButtonDisabled = isSubmitted && !isFormValid();
 
   return (
     <AuthFormConteiner>
@@ -77,7 +129,11 @@ export default function AuthForm({ isSignUp = false }) {
                 name="name"
                 placeholder="Имя"
                 value={formData.name}
-                onChange={handleChange}                
+                onChange={handleChange}
+                onBlur={handleBlur}
+                $isValid={isNameValid}
+                $isTouched={touched.name}
+                $hasError={hasNameError}
               />
             )}
             <AuthFormInput
@@ -85,23 +141,37 @@ export default function AuthForm({ isSignUp = false }) {
               name="login"
               placeholder="Эл. почта"
               value={formData.login}
-              onChange={handleChange}              
+              onChange={handleChange}
+              onBlur={handleBlur}
+              $isValid={isLoginValid}
+              $isTouched={touched.login}
+              $hasError={hasLoginError}
             />
             <AuthFormInput
               type="password"
               name="password"
               placeholder="Пароль"
               value={formData.password}
-              onChange={handleChange}              
+              onChange={handleChange}
+              onBlur={handleBlur}
+              $isValid={isPasswordValid}
+              $isTouched={touched.password}
+              $hasError={hasPasswordError}
             />
 
             {error && (
-              <div style={{ color: "#F84D4D", fontSize: "12px", textAlign: "center" }}>
+              <div
+                style={{
+                  color: "rgba(248, 77, 77, 1)",
+                  fontSize: "12px",
+                  textAlign: "center",
+                }}
+              >
                 {error}
               </div>
             )}
 
-            <AuthFormBtnEnter type="submit">
+            <AuthFormBtnEnter type="submit" $disabled={isButtonDisabled}>
               <p>{isSignUp ? "Зарегистрироваться" : "Войти"}</p>
             </AuthFormBtnEnter>
             <AuthFormGroup>

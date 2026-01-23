@@ -63,18 +63,17 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
 
   const barWidth = 94;
   const gap = 32;
+
   const chartWidth = 725;
   const chartHeight = 387;
 
-  const leftPadding = 0;
-  const textAboveGap = 10;
-  const textBelowPadding = 32;
-
   const graphTop = 40;
-  const graphBottom = textBelowPadding + 12;
-  const graphHeight = chartHeight - graphTop - graphBottom;
+  const categoryLabelGap = 12;
 
-  const startX = leftPadding;
+  const graphHeight = chartHeight - graphTop;
+
+  const startX = (chartWidth - (barWidth + gap) * categories.length + gap) / 2;
+  const labelY = graphTop + graphHeight + categoryLabelGap;
 
   return (
     <ChartContainer>
@@ -90,7 +89,8 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
         <svg
           width="100%"
           height="100%"
-          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+          
+          viewBox={`0 0 ${chartWidth} ${chartHeight + 30}`}
           xmlns="http://www.w3.org/2000/svg"
         >
           {values.map((value, i) => {
@@ -99,8 +99,7 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
             const y = graphTop + (graphHeight - height);
 
             const textX = x + barWidth / 2;
-            const textY = y - textAboveGap;
-            const labelY = chartHeight - textBelowPadding;
+            const textY = y - 10;
 
             return (
               <g key={categories[i].name}>
@@ -111,7 +110,8 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
                     textAnchor="middle"
                     fontSize="10"
                     fill="#111"
-                    fontWeight="500"
+                    fontWeight="600"
+
                   >
                     {formatNumber(value)} ₽
                   </text>
@@ -130,7 +130,8 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
                   textAnchor="middle"
                   fontSize="12"
                   fill="#94a6be"
-                  fontWeight="500"
+                  fontWeight="600"
+                  dominantBaseline="hanging"
                 >
                   {categories[i].name}
                 </text>
