@@ -99,6 +99,7 @@ export const Cell = styled.td`
 export const CellImg = styled.img`
   max-height: 15px;
   height: auto;
+  cursor: pointer;
 `;
 
 export const SFormContainer = styled.div`

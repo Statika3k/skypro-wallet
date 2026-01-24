@@ -8,6 +8,7 @@ import {
   CategoryImage,
   CategoryItem,
   Cell,
+  CellImg,
   HeaderCell,
   HeaderLineBorder,
   LineCell,
@@ -37,7 +38,7 @@ function MainPage() {
 
   useEffect(() => {
     loadTasks();
-  }, []);
+  }, [loadTasks]);
 
   const descriptionValid = description.trim().length >= 4;
   const categoryValid = [
@@ -146,7 +147,7 @@ function MainPage() {
                         <Cell>{formatDate(task.date)}</Cell>
                         <Cell>{task.sum}</Cell>
                         <Cell>
-                          <img src="/images/корзина.svg" alt="корзина" onClick={() => handleDelete(task._id)}/>
+                          <CellImg src="/images/корзина.svg" alt="корзина" onClick={() => handleDelete(task._id)}/>
                         </Cell>
                       </LineCell>) : null
                       ))
