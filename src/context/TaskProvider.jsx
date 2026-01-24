@@ -7,7 +7,7 @@ export const TaskProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const loadTasks = async () => {
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
   if (token) {
     try {
       const data = await fetchTasks();
