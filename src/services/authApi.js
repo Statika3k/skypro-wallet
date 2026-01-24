@@ -13,6 +13,8 @@ export async function signIn({ login, password }) {
         },
       }
     );
+    localStorage.setItem('token', response.data.token);
+    console.log('Токен после входа:', response.data.token);
     return response.data.user;
   } catch (error) {
     throw new Error(error.response?.data?.error);
