@@ -2,6 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import Header from "../Header/Header";
 import { TaskContext } from "../../context/TaskContext";
+import { deleteTask } from "../../services/api";
 import {
   CategoryContainer,
   CategoryImage,
@@ -27,52 +28,40 @@ import {
   SWrapper,  
   TableHeaderCell,
 } from "./MainPage.styled";
-import { deleteTask } from "../../services/api";
-
-
 
 function MainPage() {
- const {tasks, loadTasks, addTask, deleteTaskFromState, isLoading,} = useContext(TaskContext);
+  const {tasks, loadTasks, addTask, deleteTaskFromState} = useContext(TaskContext);
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
   const [sum, setSum] = useState('');
 
-  const [isDescriptionValid, setIsDescriptionValid] = useState(null);
-  const [isCategoryValid, setIsCategoryValid] = useState(null);
-  const [isDateValid, setIsDateValid] = useState(null);
-  const [isSumValid, setIsSumValid] = useState(null);
-  const [isFormValid, setIsFormValid] = useState(false);
-
   useEffect(() => {
     loadTasks();
-  }, []);
+  }, [loadTasks]);
 
-  useEffect(() => {
   const descriptionValid = description.trim().length >= 4;
-  setIsDescriptionValid(description.trim().length === 0 ? null : descriptionValid);
-
-  const categoryValid = ['food', 'transport', 'housing', 'joy', 'education', 'others'].includes(category);
-  setIsCategoryValid(category === '' ? null : categoryValid);
-
-  const dateValid = !isNaN(new Date(date).getTime());
-  setIsDateValid(date === '' ? null : dateValid);
-
+  const categoryValid = [
+    "food",
+    "transport",
+    "housing",
+    "joy",
+    "education",
+    "others",
+  ].includes(category);
+  const dateValid = date !== "" && !isNaN(new Date(date).getTime());
   const sumNumber = parseFloat(sum);
-  const sumValid = !isNaN(sumNumber) && sumNumber > 0;
-  setIsSumValid(sum === '' ? null : sumValid);
+  const sumValid = sum !== "" && !isNaN(sumNumber) && sumNumber > 0;
 
-  if (
-    description.trim().length >= 4 &&
-    ['food', 'transport', 'housing', 'joy', 'education', 'others'].includes(category) &&
-    !isNaN(new Date(date).getTime()) &&
-    sumNumber > 0
-  ) {
-    setIsFormValid(true);
-  } else {
-    setIsFormValid(false);
-  }
-}, [description, category, date, sum]);
+  const isFormValid =
+  descriptionValid &&
+  categoryValid &&
+  dateValid &&
+  sumValid &&
+  description.trim() !== "" &&
+  category !== "" &&
+  date !== "" &&
+  sum !== "";
 
   const handleAddTask = async (e) => {
   e.preventDefault();
@@ -158,7 +147,7 @@ function MainPage() {
                         <Cell>{formatDate(task.date)}</Cell>
                         <Cell>{task.sum}</Cell>
                         <Cell>
-                          <img src="/images/корзина.svg" alt="корзина" onClick={() => handleDelete(task._id)}/>
+                          <CellImg src="/images/корзина.svg" alt="корзина" onClick={() => handleDelete(task._id)}/>
                         </Cell>
                       </LineCell>) : null
                       ))
@@ -176,7 +165,7 @@ function MainPage() {
                     placeholder="Введите описание" 
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    $isValid={isDescriptionValid}
+                    $isValid={description.trim() === '' ? null : descriptionValid}
                     />
                   <SFormLabel>Категория {category === '' && <span style={{color: 'red', marginLeft: '4px'}}>*</span>}</SFormLabel>
                  <CategoryContainer>
@@ -229,7 +218,7 @@ function MainPage() {
                     placeholder="Введите дату" 
                     value={date}
                     onChange={(e) => setDate(e.target.value)}  
-                    $isValid={isDateValid}
+                    $isValid={date === '' ? null : dateValid}
                     />
                   <SFormLabel>Сумма</SFormLabel>
                   <SFormInput 
@@ -237,7 +226,7 @@ function MainPage() {
                     placeholder="Введите сумму" 
                     value={sum}
                     onChange={(e) => setSum(e.target.value)}  
-                    $isValid={isSumValid}
+                    $isValid={sum === '' ? null : sumValid}
                     />
                   <SFormButton type="button" onClick={handleAddTask} $isActive={isFormValid} disabled={!isFormValid}>Добавить новый расход</SFormButton>
                 </SStyledForm>

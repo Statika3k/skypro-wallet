@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AUTH_URL = 'https://wedev-api.sky.pro/api/user';
+const AUTH_URL = "https://wedev-api.sky.pro/api/user";
 
 export async function signIn({ login, password }) {
   try {
@@ -13,7 +13,13 @@ export async function signIn({ login, password }) {
         },
       }
     );
-    return response.data.user;
+    const user = response.data.user;
+    if (!user || !user.token) {
+      throw new Error("Сервер не вернул токен");
+    }
+    localStorage.setItem('token', user.token);
+    console.log('Токен после входа:', user.token);
+    return user;
   } catch (error) {
     throw new Error(error.response?.data?.error);
   }
@@ -30,7 +36,13 @@ export async function signUp({ login, name, password }) {
         },
       }
     );
-    return response.data.user;
+    const user = response.data.user;
+    if (!user || !user.token) {
+      throw new Error("Сервер не вернул токен после регистрации");
+    }
+    localStorage.setItem("token", user.token);
+    console.log("Токен после регистрации:", user.token);
+    return user;
   } catch (error) {
     throw new Error(error.response?.data?.error);
   }

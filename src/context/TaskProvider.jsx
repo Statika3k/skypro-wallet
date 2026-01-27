@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { addTasks, fetchTasks } from "../services/api";
 import { TaskContext } from "./TaskContext";
 
@@ -6,23 +6,16 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadTasks = async () => {
-  const token = localStorage.getItem("authToken");
-  if (token) {
+  const loadTasks = useCallback(async () => {
     try {
       const data = await fetchTasks();
-      console.log("Полученные транзакции:", data);
       setTasks(data);
     } catch (err) {
       console.error("Ошибка при загрузке задач:", err);
     } finally {
       setIsLoading(false);
     }
-  } else {
-    console.warn("Токен не найден");
-    setIsLoading(false);
-  }
-};
+  }, []);
 
  const addTask = async (taskData) => {
   try {

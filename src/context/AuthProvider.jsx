@@ -19,16 +19,16 @@ const getStoredUser = () => {
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(getStoredUser);
-  
+
   const updateUserInfo = (userData) => {
-    if (userData) {      
+    if (userData) {
       localStorage.setItem("token", userData.token);
       localStorage.setItem("isAuth", "true");
       localStorage.setItem("userLogin", userData.login);
       localStorage.setItem("userName", userData.name);
 
       setUser(userData);
-    } else {      
+    } else {
       localStorage.removeItem("token");
       localStorage.removeItem("isAuth");
       localStorage.removeItem("userLogin");
