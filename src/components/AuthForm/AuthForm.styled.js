@@ -5,16 +5,27 @@ export const AuthFormConteiner = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: rgba(244, 245, 246, 1);
+
+  @media (max-width: 376px) {
+    background-color: rgba(255, 255, 255, 1);
+    align-items: flex-start;
+    padding-top: 151px;
+  }
 `;
 
 export const AuthFormSignIn = styled.div`
-  background: white;
+  background: rgba(255, 255, 255, 1);
   padding: 32px;
   border-radius: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 379px;
+
+  @media (max-width: 376px) {
+  padding: 0 16px;
+  box-shadow: none;
+  }
 `;
 
 export const AuthFormBlock = styled.div`
@@ -29,8 +40,7 @@ export const AuthFormHeader = styled.div`
   h2 {
     font-size: 24px;
     font-weight: 700;
-    color: #000000;
-    margin: 0;
+    color: #000000;    
   }
 `;
 
@@ -48,7 +58,9 @@ export const AuthFormInput = styled.input`
   font-family: inherit;
   color: rgba(0, 0, 0, 1);
   background-color: rgba(255, 255, 255, 1);
-  transition: border-color 0.2s, background-color 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
   width: 100%;
   outline: none;
 
@@ -60,7 +72,6 @@ export const AuthFormInput = styled.input`
   &::placeholder {
     color: rgba(153, 153, 153, 1);
   }
-  
 
   /* Успешное состояние */
   ${({ $isValid, $isTouched }) =>
@@ -135,4 +146,3 @@ export const AuthFormGroup = styled.div`
     cursor: pointer;
   }
 `;
-
