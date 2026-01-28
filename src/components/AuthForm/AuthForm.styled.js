@@ -7,7 +7,7 @@ export const AuthFormConteiner = styled.div`
   min-height: 100vh;
   background-color: rgba(244, 245, 246, 1);
 
-  @media (max-width: 375px) {
+  @media (max-width: 376px) {
     background-color: rgba(255, 255, 255, 1);
     align-items: flex-start;
     padding-top: 151px;
@@ -22,7 +22,7 @@ export const AuthFormSignIn = styled.div`
   width: 100%;
   max-width: 379px;
 
-  @media (max-width: 375px) {
+  @media (max-width: 376px) {
   padding: 0 16px;
   box-shadow: none;
   }
