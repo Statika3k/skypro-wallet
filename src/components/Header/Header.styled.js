@@ -79,7 +79,7 @@ export const MobileMenuButton = styled.button`
   border: none;
   font-size: 14px;
   cursor: pointer;
-  color: #7334EA;
+  color: #000000;
   padding: 0;
 `;
 
