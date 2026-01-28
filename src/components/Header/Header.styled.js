@@ -15,7 +15,11 @@ export const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 16px;
-  justify-content: space-between; /* ← вернули */
+  justify-content: space-between;
+
+    @media (max-width: 376px) {
+  background-color: #F4F5F6;
+  }
 `;
 
 export const HeaderLogo = styled.div`
@@ -39,7 +43,7 @@ export const HeaderNav = styled.div`
   display: flex;
   gap: 48px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 376px) {
     display: none;
   }
 `;
@@ -49,7 +53,7 @@ export const MobileCurrentPage = styled.div`
   display: none;
   align-items: center;
   gap: 8px;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   color: #7334EA;
   white-space: nowrap;
@@ -64,7 +68,7 @@ export const MobileCurrentPage = styled.div`
     text-underline-offset: 4px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 376px) {
     display: flex;
     margin-left: 48px;
   }
@@ -82,7 +86,7 @@ export const MobileMenuButton = styled.button`
 export const MobileMenuDropdown = styled.div`
   display: none;
 
-  @media (max-width: 768px) {
+  @media (max-width: 376px) {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -130,7 +134,7 @@ export const NavLink = styled(Link)`
   text-decoration: none;
   color: #000000;
   font-weight: ${({ $active }) => ($active ? '600' : '400')};
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
 
   ${({ $active }) =>
@@ -154,7 +158,7 @@ export const LogoutButton = styled.button`
   border: none;
   color: #000000;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   padding: 0;
