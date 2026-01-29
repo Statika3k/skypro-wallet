@@ -11,7 +11,6 @@ import Calendar from "../Calendar/Calendar";
 import ChartComponent from "../Chart/Chart";
 
 const fetchExpensesByPeriod = async (startDate, endDate) => {
-  console.log("Запрос к API:", { startDate, endDate });
 
   await new Promise((res) => setTimeout(res, 500));
 

@@ -18,7 +18,6 @@ export async function signIn({ login, password }) {
       throw new Error("Сервер не вернул токен");
     }
     localStorage.setItem('token', user.token);
-    console.log('Токен после входа:', user.token);
     return user;
   } catch (error) {
     throw new Error(error.response?.data?.error);
@@ -41,7 +40,6 @@ export async function signUp({ login, name, password }) {
       throw new Error("Сервер не вернул токен после регистрации");
     }
     localStorage.setItem("token", user.token);
-    console.log("Токен после регистрации:", user.token);
     return user;
   } catch (error) {
     throw new Error(error.response?.data?.error);
