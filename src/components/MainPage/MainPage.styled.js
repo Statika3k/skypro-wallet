@@ -7,7 +7,7 @@ export const SWrapper = styled.div`
   padding-left: 20px; 
   padding-right: 20px;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     max-width: 370px;
     width: 100%;
     padding: 0px;
@@ -19,7 +19,7 @@ export const SMain = styled.main`
   min-height: 100vh;
   margin-top: 36px;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     background-color: #fff;
     margin-top: 0px;
     padding-top: 22px;
@@ -46,7 +46,7 @@ export const SPageTitle = styled.h1`
   text-align: left;
   margin-bottom: 32px;
     
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     width: 175px;
     height: 29px;
     font-size: 24px;
@@ -74,7 +74,7 @@ export const SPageMyTransaction = styled.div`
 export const SPageButton = styled.a`
   display: none;
     
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: block;
     color: rgba(0, 0, 0, 1);
     font-family: Montserrat;
@@ -90,7 +90,7 @@ export const SPageButton = styled.a`
 export const SPageMyButton = styled.a`
   display: none;
     
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: block;
     color: rgba(153, 153, 153, 1);
     font-family: Montserrat;
@@ -110,7 +110,7 @@ export const SContainer = styled.div`
   width: 100%; 
   box-sizing: border-box;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: block;
   }
 `;
@@ -120,7 +120,7 @@ export const STableContainer = styled.div`
   position: relative;
   overflow-x: auto;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: block;
     width: 100%;
   }
@@ -134,7 +134,7 @@ export const SStyledTable = styled.table`
   background: rgba(255, 255, 255, 1);
   border-collapse: collapse;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     box-shadow: none;
     border: none;
     border-radius: 0;
@@ -152,7 +152,7 @@ export const TableHeaderCell = styled.th`
   border: none;
   text-align: left;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: none;
   }
 `;
@@ -163,7 +163,7 @@ export const HeaderCell = styled.th`
   border: none; 
   text-align: left;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     padding: 12px 16px;
     font-size: 12px;
     font-weight: 400;
@@ -190,7 +190,7 @@ export const HeaderLineBorder = styled.td`
 export const SpacerRow = styled.tr`
   height: 4px;
     
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: none;
   }
 `;
@@ -199,7 +199,7 @@ export const LineCell = styled.tr`
   background-color: ${(props) => (props.$isSelected ? 'rgba(241, 235, 253, 1)' : 'transparent')};
   transition: background-color 0.2s ease;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     min-height: 44px;
     cursor: pointer;
   }
@@ -210,7 +210,7 @@ export const Cell = styled.td`
   border: none; 
   line-height: 1.4; 
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     padding: 12px 16px;
     font-size: 12px;
     line-height: 1.5;
@@ -239,7 +239,7 @@ export const SFormContainer = styled.div`
   box-shadow: 0px 20px 67px -12px rgba(0, 0, 0, 0.13);
   background: rgba(255, 255, 255, 1);
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: block;
     margin-top: 0;
     width: 100%;
@@ -251,7 +251,7 @@ export const SFormContainer = styled.div`
 export const SFormContent = styled.div`
   padding: 32px;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     padding: 24px 16px;
   }
 `;
@@ -273,7 +273,7 @@ export const SFormTitle = styled.h2`
   line-height: 29px;
   letter-spacing: 0px;
     
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     font-size: 24px;
     line-height: 29px;
     padding-bottom: 16px;
@@ -408,7 +408,7 @@ export const SDeleteButtonContainer = styled.div`
   box-shadow: 0px -20px 67px -12px rgba(0, 0, 0, 0.13);
   z-index: 1000;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: ${(props) => (props.$isVisible ? 'block' : 'none')};
   }
 `;
@@ -444,7 +444,7 @@ export const SAddButtonContainer = styled.div`
   box-shadow: 0px -20px 67px -12px rgba(0, 0, 0, 0.13);
   z-index: 1000;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 375px) {
     display: block;
   }
 `;

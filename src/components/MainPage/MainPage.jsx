@@ -54,7 +54,7 @@ function MainPage() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    const mediaQuery = window.matchMedia('(max-width: 370px)');
+    const mediaQuery = window.matchMedia('(max-width: 375px)');
     setIsMobile(mediaQuery.matches);
     
     const handler = (e) => setIsMobile(e.matches);
