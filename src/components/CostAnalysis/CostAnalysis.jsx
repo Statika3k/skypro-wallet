@@ -10,8 +10,7 @@ import Header from "../Header/Header";
 import Calendar from "../Calendar/Calendar";
 import ChartComponent from "../Chart/Chart";
 
-const fetchExpensesByPeriod = async (startDate, endDate) => {
-
+const fetchExpensesByPeriod = async () => {
   await new Promise((res) => setTimeout(res, 500));
 
   return [
