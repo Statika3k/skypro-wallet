@@ -1,5 +1,11 @@
-import { useState, useEffect } from "react";
-import { Page, SectionTitle, CalendarChart } from "./CostAnalysis.styled";
+import { useState } from "react";
+import {
+  Page,
+  SectionTitle,
+  CalendarChart,
+  Period,
+  ButtonPeriod,
+} from "./CostAnalysis.styled";
 import Header from "../Header/Header";
 import Calendar from "../Calendar/Calendar";
 import ChartComponent from "../Chart/Chart";
@@ -19,11 +25,31 @@ const fetchExpensesByPeriod = async (startDate, endDate) => {
   ];
 };
 
-export const CostAnalysis = () => {
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [periodData, setPeriodData] = useState([]);
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
+  useState(() => {
+    const mediaQuery = window.matchMedia("(max-width: 376px)");
+    const handleChange = (e) => setIsMobile(e.matches);
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  return isMobile;
+};
+
+export const CostAnalysis = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const [selectedDates, setSelectedDates] = useState([today]);
+  const [periodData, setPeriodData] = useState([]);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  const isMobile = useIsMobile();
+
+  useState(() => {
     if (selectedDates.length === 0) {
       setPeriodData([]);
       return;
@@ -37,21 +63,68 @@ export const CostAnalysis = () => {
     });
   }, [selectedDates]);
 
+  const handleOpenCalendar = () => {
+    setIsCalendarOpen(true);
+  };
+
+  const handleCloseCalendar = () => {
+    setIsCalendarOpen(false);
+  };
+
+  const handleDateSelect = (dates) => {
+    setSelectedDates(dates);
+  };
+
+  const isTodaySelected =
+    selectedDates.length === 1 &&
+    selectedDates[0].toDateString() === today.toDateString();
+
   return (
     <>
       <Header />
       <Page>
-        <SectionTitle>Анализ расходов</SectionTitle>
+        <SectionTitle $small={isCalendarOpen}>Анализ расходов</SectionTitle>
         <CalendarChart>
-          <Calendar
-            selectedDates={selectedDates}
-            setSelectedDates={setSelectedDates}
-          />
-          <ChartComponent
-            selectedDates={selectedDates}
-            periodData={periodData}
-          />
+          {isMobile && isCalendarOpen && (
+            <Calendar
+              selectedDates={selectedDates}
+              setSelectedDates={handleDateSelect}
+            />
+          )}
+          {isMobile && !isCalendarOpen && (
+            <ChartComponent
+              selectedDates={selectedDates}
+              periodData={periodData}
+            />
+          )}
+          {!isMobile && (
+            <>
+              <Calendar
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+              />
+              <ChartComponent
+                selectedDates={selectedDates}
+                periodData={periodData}
+              />
+            </>
+          )}
         </CalendarChart>
+        {isMobile && (
+          <Period>
+            <ButtonPeriod
+              onClick={
+                isCalendarOpen ? handleCloseCalendar : handleOpenCalendar
+              }
+            >
+              {isCalendarOpen
+                ? "Выбрать период"
+                : isTodaySelected
+                  ? "Выбрать другой период"
+                  : "Изменить период"}
+            </ButtonPeriod>
+          </Period>
+        )}
       </Page>
     </>
   );
