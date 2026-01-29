@@ -17,24 +17,27 @@ export const Container = styled.div`
   padding: 0 16px;
   justify-content: space-between;
 
-    @media (max-width: 376px) {
-  background-color: #F4F5F6;
+  @media (max-width: 376px) {
+    background-color: #f4f5f6;
   }
 `;
 
 export const HeaderLogo = styled.div`
   img {
     display: block;
-    width: 109px;
-    height: 14px;
+    width: auto;
+    height: 19px; /* ← десктоп */
     object-fit: contain;
   }
 
   /* Отступ между логотипом и навигацией на десктопе */
   margin-right: 48px;
 
-  @media (max-width: 768px) {
-    margin-right: 0; /* на мобилке — без отступа (он будет у MobileCurrentPage) */
+  @media (max-width: 376px) {
+    margin-right: 0;
+    img {
+      height: 14px; 
+    }
   }
 `;
 
@@ -48,14 +51,14 @@ export const HeaderNav = styled.div`
   }
 `;
 
-// Мобильное название
+// Мобильное название (текст + стрелка)
 export const MobileCurrentPage = styled.div`
   display: none;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: 12px; /* ← мобилка */
   font-weight: 600;
-  color: #7334EA;
+  color: #7334ea;
   white-space: nowrap;
   flex-shrink: 1;
   min-width: 0;
@@ -63,7 +66,7 @@ export const MobileCurrentPage = styled.div`
 
   .mobile-page-title {
     text-decoration: underline;
-    text-decoration-color: #7334EA;
+    text-decoration-color: #7334ea;
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
   }
@@ -106,7 +109,7 @@ export const MobileMenuItem = styled(Link)`
   text-decoration: none;
   padding: 7px 14px;
   border-radius: 24px;
-  font-size: 16px;
+  font-size: 10px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -115,14 +118,14 @@ export const MobileMenuItem = styled(Link)`
   min-height: 26px;
   white-space: nowrap;
 
-  background-color: #F4F5F6;
+  background-color: #f4f5f6;
   color: #000000;
 
   ${({ $active }) =>
     $active &&
     `
-      background-color: #F1EBFD;
-      color: #7334EA;
+      background-color: #f1ebfd;
+      color: #7334ea;
     `}
 
   &:hover {
@@ -130,40 +133,50 @@ export const MobileMenuItem = styled(Link)`
   }
 `;
 
+// Ссылки в десктопной навигации
 export const NavLink = styled(Link)`
   text-decoration: none;
   color: #000000;
   font-weight: ${({ $active }) => ($active ? '600' : '400')};
-  font-size: 12px;
+  font-size: 24px; /* ← десктоп */
   cursor: pointer;
 
   ${({ $active }) =>
     $active &&
     `
-      color: #7334EA;
+      color: #7334ea;
       text-decoration: underline;
-      text-decoration-color: #7334EA;
+      text-decoration-color: #7334ea;
       text-decoration-thickness: 2px;
       text-underline-offset: 4px;
     `}
 
   &:hover:not([data-active='true']) {
-    color: #7334EA;
+    color: #7334ea;
     font-weight: 600;
+  }
+
+  @media (max-width: 376px) {
+    font-size: 12px; /* ← мобилка */
   }
 `;
 
+// Кнопка "Выйти"
 export const LogoutButton = styled.button`
   background: none;
   border: none;
   color: #000000;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 24px; /* ← десктоп */
   font-weight: 600;
   cursor: pointer;
   padding: 0;
 
   &:hover {
-    color: #7334EA;
+    color: #7334ea;
+  }
+
+  @media (max-width: 376px) {
+    font-size: 12px; /* ← мобилка */
   }
 `;
