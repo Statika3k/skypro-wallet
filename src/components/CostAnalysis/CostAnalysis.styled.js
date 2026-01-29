@@ -47,11 +47,10 @@ export const CalendarChart = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 
-
   @media (max-width: 376px) {
-   display: flex;
+    display: flex;
     background: none;
- 
+  }
 `;
 
 export const Period = styled.div`
