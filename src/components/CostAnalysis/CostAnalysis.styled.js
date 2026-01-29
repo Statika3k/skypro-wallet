@@ -24,7 +24,6 @@ export const SectionTitle = styled.h1`
   @media (max-width: 376px) {
     font-family: Montserrat;
     font-weight: bold;
-    font-size: 24px;
     line-height: 100%;
     letter-spacing: 0px;
     text-align: start;
@@ -35,7 +34,6 @@ export const SectionTitle = styled.h1`
       $small &&
       `
       font-size: 12px;
-      padding: 10px 10px;
       color: #94a6be;
     `}
   }
@@ -55,27 +53,24 @@ export const CalendarChart = styled.div`
 
 export const Period = styled.div`
   display: none;
+  position: fixed;
+  bottom: 0;
+  left: -1px;
+  right: 0;
+  padding: 24px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px -20px 67px -12px rgba(0, 0, 0, 0.13);
+  z-index: 1000;
 
-  @media (max-width: 376px) {
-    display: flex;
-    width: 375px;
-    height: 87px;
-    position: fixed;
-    top: 609px;
-    left: -1px;
-    opacity: 1;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px -20px 67px -12px rgba(0, 0, 0, 0.13);
-    align-items: center;
-    align-content: center;
-    justify-content: center;
+  @media screen and (max-width: 376px) {
+    display: block;
   }
 `;
 
 export const ButtonPeriod = styled.button`
   @media (max-width: 376px) {
     color: #fff;
-    width: 343px;
+    width: 100%;
     height: 39px;
     opacity: 1;
     gap: 12px;

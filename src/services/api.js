@@ -4,7 +4,6 @@
 
   function getAuthHeaders() {
     const token = localStorage.getItem('token');
-    console.log('Токен', token );
     return token ? { Authorization: `Bearer ${token}` } : {};
   }
 
@@ -14,7 +13,6 @@
       const response = await axios.get(API_URL, {
         headers: getAuthHeaders(),
       });
-      console.log('Ответ сервера', response.data);
       return response.data;
     } catch (error) {
       throw new Error('Ошибка при получении транзакций');
@@ -41,8 +39,6 @@
       date: formattedDate,
     };
 
-    console.log('Отправляемые данные:', data);
-
     try {
       const response = await axios.post(API_URL, data, {
         headers: {
@@ -50,7 +46,6 @@
           ...getAuthHeaders(),
         },
       });
-      console.log('Ответ сервера при добавлении:', response.data);
       return response.data.transaction; 
     } catch (error) {
       if (error.response) {
