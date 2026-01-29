@@ -83,7 +83,31 @@ export const CostAnalysis = () => {
     <>
       <Header />
       <Page>
-        <SectionTitle $small={isCalendarOpen}>Анализ расходов</SectionTitle>
+        {isMobile && isCalendarOpen ? (
+          <SectionTitle $small={true}>
+            <button
+              type="button"
+              onClick={handleCloseCalendar}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                color: "inherit",
+                background: "none",
+                border: "none",
+                padding: 0,
+                fontSize: "12px",
+                cursor: "pointer",
+                textDecoration: "none",
+              }}
+            >
+              <img src="../../../public/images/назад.svg" />
+              Анализ расходов
+            </button>
+          </SectionTitle>
+        ) : (
+          <SectionTitle $small={isCalendarOpen}>Анализ расходов</SectionTitle>
+        )}
         <CalendarChart>
           {isMobile && isCalendarOpen && (
             <Calendar

@@ -13,7 +13,6 @@ export const CalendarContainer = styled.div`
   @media (max-width: 376px) {
     width: 100%;
     height: 513px;
-    z-index: 1100;
     margin: 0;
     border-radius: 0 0 24px 24px;
     box-shadow: none;
@@ -43,6 +42,7 @@ export const CalendarTitle = styled.p`
 
   @media (max-width: 376px) {
     padding: 20px 10px;
+    padding-top: 0;
   }
 `;
 
