@@ -108,7 +108,7 @@ export const MobileMenuDropdown = styled.div`
 export const MobileMenuItem = styled(Link)`
   text-decoration: none;
   padding: 7px 14px;
-  border-radius: 24px;
+  border-radius: 14px;
   font-size: 10px;
   font-weight: 500;
   cursor: pointer;
@@ -138,7 +138,7 @@ export const NavLink = styled(Link)`
   text-decoration: none;
   color: #000000;
   font-weight: ${({ $active }) => ($active ? '600' : '400')};
-  font-size: 24px; /* ← десктоп */
+  font-size: 14px; /* ← десктоп */
   cursor: pointer;
 
   ${({ $active }) =>
@@ -167,7 +167,7 @@ export const LogoutButton = styled.button`
   border: none;
   color: #000000;
   font-family: inherit;
-  font-size: 24px; /* ← десктоп */
+  font-size: 14px; /* ← десктоп */
   font-weight: 600;
   cursor: pointer;
   padding: 0;
