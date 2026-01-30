@@ -22,6 +22,8 @@ import {
   SFormInput,
   SFormLabel,
   SFormTitle,
+  SLoaderOverlay,
+  SLoaderSpinner,
   SMain,
   SpacerRow,
   SPage,
@@ -38,7 +40,7 @@ import {
 } from "./MainPage.styled";
 
 function MainPage() {
-  const {tasks, loadTasks, addTask, deleteTaskFromState} = useContext(TaskContext);
+  const {tasks, loadTasks, addTask, deleteTaskFromState, isLoading} = useContext(TaskContext);
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
@@ -46,6 +48,7 @@ function MainPage() {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     loadTasks();
@@ -90,6 +93,10 @@ function MainPage() {
 
   const handleAddTask = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting || !isFormValid) return;
+    setIsSubmitting(true);
+
     const newTask = {
       description,
       category,
@@ -108,6 +115,8 @@ function MainPage() {
       }
     } catch (err) {
       console.error('Ошибка при добавлении:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -144,12 +153,10 @@ function MainPage() {
       setSelectedTaskId(prevId => (prevId === taskId ? null : taskId));
     }
   };
-
-  // Обработчик кнопки "Назад" в мобильной версии
+  
   const handleBackClick = () => {
     setIsAddFormOpen(false);
-    setSelectedTaskId(null);
-    // Сброс формы при закрытии
+    setSelectedTaskId(null);    
     setDescription('');
     setCategory('');
     setDate('');
@@ -162,6 +169,11 @@ function MainPage() {
         isAddFormOpen={isAddFormOpen} 
         setIsAddFormOpen={setIsAddFormOpen}
       />
+      {isLoading && (
+        <SLoaderOverlay>
+          <SLoaderSpinner />
+        </SLoaderOverlay>
+      )}
       <SWrapper>
         <SMain>
           <SPage>
@@ -324,8 +336,7 @@ function MainPage() {
                   </SStyledTable>
                 </STableContainer>
               )
-            ) : (
-              // Десктопная версия
+            ) : (              
               <>
                 <STableContainer>
                   <SStyledTable>
@@ -454,10 +465,10 @@ function MainPage() {
                       <SFormButton
                         type="button"
                         onClick={handleAddTask}
-                        $isActive={isFormValid}
-                        disabled={!isFormValid}
+                        $isActive={isFormValid && !isSubmitting}
+                        disabled={!isFormValid || isSubmitting}
                       >
-                        Добавить новый расход
+                        {isSubmitting ? 'Добавление...' : 'Добавить новый расход'}
                       </SFormButton>
                     </SStyledForm>
                   </SFormContent>
@@ -480,14 +491,14 @@ function MainPage() {
         <SAddButtonContainer>
           <SAddButton
             onClick={handleAddTask}
-            disabled={!isFormValid}
+            disabled={!isFormValid || isSubmitting}
             style={{ 
-              opacity: isFormValid ? 1 : 0.6, 
-              cursor: isFormValid ? 'pointer' : 'not-allowed',
-              background: isFormValid ? 'rgba(115, 52, 234, 1)' : 'rgba(153, 153, 153, 1)'
+              opacity: (isFormValid && !isSubmitting) ? 1 : 0.6, 
+              cursor: (isFormValid && !isSubmitting) ? 'pointer' : 'not-allowed',
+              background: (isFormValid && !isSubmitting) ? 'rgba(115, 52, 234, 1)' : 'rgba(153, 153, 153, 1)'
             }}
           >
-            Добавить новый расход
+            {isSubmitting ? 'Добавление...' : 'Добавить новый расход'}
           </SAddButton>
         </SAddButtonContainer>
       )}
