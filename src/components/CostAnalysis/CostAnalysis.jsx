@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Page,
   SectionTitle,
@@ -9,24 +9,12 @@ import {
 import Header from "../Header/Header";
 import Calendar from "../Calendar/Calendar";
 import ChartComponent from "../Chart/Chart";
-
-const fetchExpensesByPeriod = async () => {
-  await new Promise((res) => setTimeout(res, 500));
-
-  return [
-    { category: "Еда", amount: Math.random() * 50 + 20 },
-    { category: "Транспорт", amount: Math.random() * 30 + 10 },
-    { category: "Жилье", amount: Math.random() * 100 + 50 },
-    { category: "Развлечения", amount: Math.random() * 20 + 5 },
-    { category: "Образование", amount: Math.random() * 15 + 3 },
-    { category: "Другое", amount: Math.random() * 25 + 8 },
-  ];
-};
+import { TaskContext } from "../../context/TaskContext";
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
 
-  useState(() => {
+  useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 376px)");
     const handleChange = (e) => setIsMobile(e.matches);
     setIsMobile(mediaQuery.matches);
@@ -37,7 +25,23 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+const parseServerDate = (dateString) => {
+  if (!dateString) return null;
+
+  if (dateString.includes("-")) {
+    const [part1, part2, part3] = dateString.split("-").map(Number);
+
+    if (part1 >= 1 && part1 <= 12 && part2 >= 1 && part2 <= 31 && part3 > 0) {
+      return new Date(part3, part1 - 1, part2);
+    }
+  }
+
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? null : date;
+};
+
 export const CostAnalysis = () => {
+  const { tasks } = useContext(TaskContext);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -47,19 +51,66 @@ export const CostAnalysis = () => {
 
   const isMobile = useIsMobile();
 
-  useState(() => {
-    if (selectedDates.length === 0) {
-      setPeriodData([]);
-      return;
+  const calculatePeriodData = (transactions, dates) => {
+    if (dates.length === 0 || !transactions || transactions.length === 0) {
+      return [];
     }
 
-    const startDate = selectedDates[0];
-    const endDate = selectedDates[selectedDates.length - 1];
+    const startDate = new Date(dates[0]);
+    startDate.setHours(0, 0, 0, 0);
 
-    fetchExpensesByPeriod(startDate, endDate).then((data) => {
-      setPeriodData(data);
+    const endDate = new Date(dates[dates.length - 1]);
+    endDate.setHours(23, 59, 59, 999);
+
+    const filteredTransactions = transactions.filter((task) => {
+      if (!task || !task.date) return false;
+
+      const taskDate = parseServerDate(task.date);
+      if (!taskDate) return false;
+
+      return taskDate >= startDate && taskDate <= endDate;
     });
-  }, [selectedDates]);
+
+    const categoryMap = {
+      food: "Еда",
+      transport: "Транспорт",
+      housing: "Жилье",
+      joy: "Развлечения",
+      education: "Образование",
+      others: "Другое",
+    };
+
+    const totals = {};
+    
+
+    Object.values(categoryMap).forEach(category => {
+      totals[category] = 0;
+    });
+
+    filteredTransactions.forEach((task) => {
+      if (!task || !task.category) return;
+      
+      const categoryName = categoryMap[task.category] || "Другое";
+      totals[categoryName] = (totals[categoryName] || 0) + (parseFloat(task.sum) || 0);
+    });
+
+    return Object.entries(totals)
+      .filter(([_, amount]) => amount > 0) 
+      .map(([category, amount]) => ({
+        category,
+        amount: Math.round(amount * 100) / 100, 
+      }));
+
+  };
+
+  useEffect(() => {
+    if (selectedDates.length > 0 && tasks) {
+      const data = calculatePeriodData(tasks, selectedDates);
+      setPeriodData(data);
+    } else {
+      setPeriodData([]);
+    }
+  }, [selectedDates, tasks]);
 
   const handleOpenCalendar = () => {
     setIsCalendarOpen(true);
@@ -70,7 +121,12 @@ export const CostAnalysis = () => {
   };
 
   const handleDateSelect = (dates) => {
-    setSelectedDates(dates);
+    if (dates && dates.length > 0) {
+      setSelectedDates(dates);
+      if (isMobile) {        
+        setTimeout(() => setIsCalendarOpen(false), 300);
+      }
+    }
   };
 
   const isTodaySelected =
@@ -132,7 +188,7 @@ export const CostAnalysis = () => {
             </>
           )}
         </CalendarChart>
-        {isMobile && (
+        {isMobile && !isCalendarOpen && (
           <Period>
             <ButtonPeriod
               onClick={
