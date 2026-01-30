@@ -144,21 +144,37 @@ function MainPage() {
     }
   };
 
+  // Обработчик кнопки "Назад" в мобильной версии
+  const handleBackClick = () => {
+    setIsAddFormOpen(false);
+    setSelectedTaskId(null);
+    // Сброс формы при закрытии
+    setDescription('');
+    setCategory('');
+    setDate('');
+    setSum('');
+  };
+
   return (
     <>
-      <Header />
+      <Header 
+        isAddFormOpen={isAddFormOpen} 
+        setIsAddFormOpen={setIsAddFormOpen}
+      />
       <SWrapper>
         <SMain>
           <SPage>
             {isMobile && isAddFormOpen ? (
-              <SPageMyTransaction onClick={() => setIsAddFormOpen(false)}>
+              <SPageMyTransaction onClick={handleBackClick}>
                 <img src="/images/назад.svg" alt="назад" />
                 <SPageMyButton>Мои расходы</SPageMyButton>
               </SPageMyTransaction>
             ) : (
               <>
-                <SPageTitle>Мои расходы</SPageTitle>
-                {isMobile && (
+                <SPageTitle>
+                  {isMobile && isAddFormOpen ? "Новый расход" : "Мои расходы"}
+                </SPageTitle>
+                {isMobile && !isAddFormOpen && (
                   <SPageNewTransaction onClick={() => {
                     setIsAddFormOpen(true);
                     setSelectedTaskId(null);
@@ -308,6 +324,7 @@ function MainPage() {
                 </STableContainer>
               )
             ) : (
+              // Десктопная версия
               <>
                 <STableContainer>
                   <SStyledTable>
@@ -332,16 +349,12 @@ function MainPage() {
                     <tbody>
                       {tasks?.map((task) => {
                         if (!task || !task.description) return null;
-                        const isSelected = task._id === selectedTaskId;
                         return (
-                          <LineCell
-                            key={task._id}
-                            $isSelected={isSelected}
-                          >
-                            <Cell $isSelected={isSelected}>{task.description}</Cell>
-                            <Cell $isSelected={isSelected}>{categoryNames[task.category] || task.category}</Cell>
-                            <Cell $isSelected={isSelected}>{formatDate(task.date)}</Cell>
-                            <Cell $isSelected={isSelected}>{task.sum}</Cell>
+                          <LineCell key={task._id}>
+                            <Cell>{task.description}</Cell>
+                            <Cell>{categoryNames[task.category] || task.category}</Cell>
+                            <Cell>{formatDate(task.date)}</Cell>
+                            <Cell>{task.sum}</Cell>
                             <Cell className="img">
                               <CellImg
                                 src="/images/корзина.svg"

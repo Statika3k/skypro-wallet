@@ -13,7 +13,7 @@ import {
   MobileMenuItem,
 } from "./Header.styled";
 
-export default function Header() {
+export default function Header({ isAddFormOpen, setIsAddFormOpen }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,8 +21,14 @@ export default function Header() {
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
 
+  // Функция для получения заголовка страницы
   const getPageTitle = () => {
-    if (location.pathname === "/") return "Мои расходы";
+    if (location.pathname === "/") {
+      if (isAddFormOpen) {
+        return "Новый расход";
+      }
+      return "Мои расходы";
+    }
     if (location.pathname === "/analytics") return "Анализ расходов";
     if (location.pathname === "/add-expense") return "Новый расход";
     return "Меню";
@@ -40,6 +46,21 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Обработчик клика по "Новый расход" в мобильном меню
+  const handleAddExpenseClick = () => {
+    if (location.pathname === "/") {
+      // Если мы на главной странице, открываем форму
+      setIsAddFormOpen(true);
+    } else {
+      // Иначе переходим на главную и открываем форму
+      navigate("/");
+      setTimeout(() => {
+        setIsAddFormOpen(true);
+      }, 0);
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <StyledHeader>
       <Container>
@@ -51,7 +72,7 @@ export default function Header() {
           <>
             {/* Десктопная навигация */}
             <HeaderNav>
-              <NavLink to="/" $active={location.pathname === "/"}>
+              <NavLink to="/" $active={location.pathname === "/" && !isAddFormOpen}>
                 Мои расходы
               </NavLink>
               <NavLink to="/analytics" $active={location.pathname === "/analytics"}>
@@ -73,18 +94,36 @@ export default function Header() {
             {/* Выпадающее меню */}
             {isMobileMenuOpen && (
               <MobileMenuDropdown>
-                <MobileMenuItem to="/" $active={location.pathname === "/"}>
+                <MobileMenuItem 
+                  to="/" 
+                  $active={location.pathname === "/" && !isAddFormOpen}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (location.pathname === "/") {
+                      setIsAddFormOpen(false);
+                    } else {
+                      navigate("/");
+                    }
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
                   Мои расходы
                 </MobileMenuItem>
                 <MobileMenuItem
-                  to="/add-expense"
-                  $active={location.pathname === "/add-expense"}
+                  to="/"
+                  $active={isAddFormOpen}
+                  onClick={handleAddExpenseClick}
                 >
                   Новый расход
                 </MobileMenuItem>
                 <MobileMenuItem
                   to="/analytics"
                   $active={location.pathname === "/analytics"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/analytics");
+                    setIsMobileMenuOpen(false);
+                  }}
                 >
                   Анализ расходов
                 </MobileMenuItem>
