@@ -80,3 +80,32 @@ export const ButtonPeriod = styled.button`
     background: rgba(115, 52, 234, 1);
   }
 `;
+
+export const SLoaderOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+`;
+
+export const SLoaderSpinner = styled.div`
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(115, 52, 234, 0.2);
+  border-top-color: rgba(115, 52, 234, 1);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;

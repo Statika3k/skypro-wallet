@@ -78,3 +78,28 @@ export async function deleteTask(id) {
     throw new Error("Ошибка при удалении транзакции");
   }
 }
+
+export async function fetchTransactionsByPeriod(startDate, endDate) {
+  try {
+    console.log('Запрос транзакций за период:', { start: startDate, end: endDate });
+    
+    const response = await axios.post(`${API_URL}/period`, {
+      start: startDate,
+      end: endDate
+    }, {
+      headers: {
+        'Content-Type': '',
+        ...getAuthHeaders(),
+      },
+    });
+    
+    console.log('Получены транзакции за период:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Ошибка при получении транзакций за период:', error);
+    if (error.response) {
+      console.error('Детали ошибки:', error.response.data);
+    }
+    throw new Error('Ошибка при получении транзакций за период');
+  }
+}

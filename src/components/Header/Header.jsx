@@ -21,9 +21,8 @@ export default function Header({ isAddFormOpen, setIsAddFormOpen }) {
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
 
-  // Функция для получения заголовка страницы
   const getPageTitle = () => {
-    if (location.pathname === "/") {
+     if (location.pathname === "/") {
       if (isAddFormOpen) {
         return "Новый расход";
       }
@@ -46,13 +45,10 @@ export default function Header({ isAddFormOpen, setIsAddFormOpen }) {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Обработчик клика по "Новый расход" в мобильном меню
   const handleAddExpenseClick = () => {
     if (location.pathname === "/") {
-      // Если мы на главной странице, открываем форму
       setIsAddFormOpen(true);
     } else {
-      // Иначе переходим на главную и открываем форму
       navigate("/");
       setTimeout(() => {
         setIsAddFormOpen(true);

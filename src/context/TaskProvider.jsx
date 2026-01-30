@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { addTasks, fetchTasks } from "../services/api";
+import { addTasks, fetchTasks, fetchTransactionsByPeriod } from "../services/api";
 import { TaskContext } from "./TaskContext";
 
 export const TaskProvider = ({ children }) => {
@@ -18,6 +18,25 @@ export const TaskProvider = ({ children }) => {
     } catch (err) {
       console.error("Ошибка при загрузке задач:", err);
       setTasks([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const loadTasksByPeriod = useCallback(async (startDate, endDate) => {
+    try {
+      setIsLoading(true);
+      const data = await fetchTransactionsByPeriod(startDate, endDate);
+      
+      if (!Array.isArray(data)) {
+        console.error('Данные за период не являются массивом:', data);
+        return [];
+      }
+      
+      return data;
+    } catch (err) {
+      console.error("Ошибка при загрузке задач за период:", err);
+      return [];
     } finally {
       setIsLoading(false);
     }
@@ -56,6 +75,7 @@ export const TaskProvider = ({ children }) => {
         addTask,
         deleteTaskFromState,
         loadTasks,
+        loadTasksByPeriod,
         isLoading,
       }}
     >

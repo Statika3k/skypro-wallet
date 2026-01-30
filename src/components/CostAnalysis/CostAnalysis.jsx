@@ -10,6 +10,7 @@ import Header from "../Header/Header";
 import Calendar from "../Calendar/Calendar";
 import ChartComponent from "../Chart/Chart";
 import { TaskContext } from "../../context/TaskContext";
+import { fetchTransactionsByPeriod } from "../../services/api";
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -28,6 +29,11 @@ const useIsMobile = () => {
 const parseServerDate = (dateString) => {
   if (!dateString) return null;
 
+  const isoDate = new Date(dateString);
+  if (!isNaN(isoDate.getTime())) {
+    return isoDate;
+  }
+
   if (dateString.includes("-")) {
     const [part1, part2, part3] = dateString.split("-").map(Number);
 
@@ -36,20 +42,49 @@ const parseServerDate = (dateString) => {
     }
   }
 
-  const date = new Date(dateString);
-  return isNaN(date.getTime()) ? null : date;
+  return null;
+};
+
+const loadSavedDates = () => {
+  try {
+    const saved = localStorage.getItem('selectedDates');
+    if (saved) {
+      const dates = JSON.parse(saved);
+      return dates.map(dateStr => new Date(dateStr));
+    }
+  } catch (e) {
+    console.error('Ошибка при загрузке сохраненных дат:', e);
+  }
+  return null;
+};
+
+const saveDates = (dates) => {
+  try {
+    localStorage.setItem('selectedDates', JSON.stringify(dates.map(date => date.toISOString())));
+  } catch (e) {
+    console.error('Ошибка при сохранении дат:', e);
+  }
 };
 
 export const CostAnalysis = () => {
-  const { tasks } = useContext(TaskContext);
+  const { tasks} = useContext(TaskContext);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const [selectedDates, setSelectedDates] = useState([today]);
+  const [selectedDates, setSelectedDates] = useState(() => {
+    const savedDates = loadSavedDates();
+    return savedDates && savedDates.length > 0 ? savedDates : [today];
+  });
+
   const [periodData, setPeriodData] = useState([]);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    saveDates(selectedDates);
+  }, [selectedDates]);
 
   const calculatePeriodData = (transactions, dates) => {
     if (dates.length === 0 || !transactions || transactions.length === 0) {
@@ -81,8 +116,6 @@ export const CostAnalysis = () => {
     };
 
     const totals = {};
-    
-
     Object.values(categoryMap).forEach(category => {
       totals[category] = 0;
     });
@@ -100,17 +133,39 @@ export const CostAnalysis = () => {
         category,
         amount: Math.round(amount * 100) / 100, 
       }));
-
   };
 
   useEffect(() => {
-    if (selectedDates.length > 0 && tasks) {
-      const data = calculatePeriodData(tasks, selectedDates);
-      setPeriodData(data);
-    } else {
-      setPeriodData([]);
-    }
-  }, [selectedDates, tasks]);
+    const loadPeriodData = async () => {
+      if (selectedDates.length === 0) {
+        setPeriodData([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const data = await fetchTransactionsByPeriod(
+          selectedDates[0],
+          selectedDates[selectedDates.length - 1]
+        );
+        
+        const calculatedData = calculatePeriodData(data, selectedDates);
+        setPeriodData(calculatedData);
+      } catch (err) {
+        console.error("Ошибка получения данных за период:", err);
+        if (tasks) {
+          const calculatedData = calculatePeriodData(tasks, selectedDates);
+          setPeriodData(calculatedData);
+        } else {
+          setPeriodData([]);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadPeriodData();
+  }, [selectedDates]);
 
   const handleOpenCalendar = () => {
     setIsCalendarOpen(true);
@@ -155,7 +210,7 @@ export const CostAnalysis = () => {
                 textDecoration: "none",
               }}
             >
-              <img src="../../../public/images/назад.svg" />
+              <img src="../../../public/images/назад.svg" alt="Назад" />
               Анализ расходов
             </button>
           </SectionTitle>
@@ -173,6 +228,7 @@ export const CostAnalysis = () => {
             <ChartComponent
               selectedDates={selectedDates}
               periodData={periodData}
+              isLoading={isLoading}
             />
           )}
           {!isMobile && (
@@ -184,6 +240,7 @@ export const CostAnalysis = () => {
               <ChartComponent
                 selectedDates={selectedDates}
                 periodData={periodData}
+                isLoading={isLoading}
               />
             </>
           )}
@@ -191,9 +248,7 @@ export const CostAnalysis = () => {
         {isMobile && !isCalendarOpen && (
           <Period>
             <ButtonPeriod
-              onClick={
-                isCalendarOpen ? handleCloseCalendar : handleOpenCalendar
-              }
+              onClick={isCalendarOpen ? handleCloseCalendar : handleOpenCalendar}
             >
               {isCalendarOpen
                 ? "Выбрать период"
