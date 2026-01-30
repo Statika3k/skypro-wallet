@@ -65,7 +65,16 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
   const gap = 32;
 
   const chartWidth = 725;
-  const chartHeight = 387;
+  let chartHeight = 387;
+
+  if (typeof window !== "undefined") {
+    if (window.innerWidth <= 768) {
+      chartHeight = 350;
+    }
+    if (window.innerWidth <= 375) {
+      chartHeight = 300;
+    }
+  }
 
   const graphTop = 40;
   const categoryLabelGap = 12;
@@ -89,7 +98,6 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
         <svg
           width="100%"
           height="100%"
-          
           viewBox={`0 0 ${chartWidth} ${chartHeight + 30}`}
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -111,7 +119,6 @@ const ChartComponent = ({ selectedDates = [], periodData = [] }) => {
                     fontSize="10"
                     fill="#111"
                     fontWeight="600"
-
                   >
                     {formatNumber(value)} ₽
                   </text>
