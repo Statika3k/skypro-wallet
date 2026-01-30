@@ -95,8 +95,7 @@ function MainPage() {
       sum,
     };
     try {
-      await addTask(newTask);
-      await loadTasks();
+      await addTask(newTask);      
       setDescription('');
       setCategory('');
       setDate('');
