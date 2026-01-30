@@ -49,7 +49,7 @@ function MainPage() {
 
   useEffect(() => {
     loadTasks();
-  }, [loadTasks]);
+  }, [loadTasks]);  
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -62,6 +62,8 @@ function MainPage() {
     
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
+
+  
 
   const descriptionValid = description.trim().length >= 4;
   const categoryValid = [
@@ -95,7 +97,7 @@ function MainPage() {
       sum,
     };
     try {
-      await addTask(newTask);      
+      await addTask(newTask);           
       setDescription('');
       setCategory('');
       setDate('');
