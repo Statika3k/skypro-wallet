@@ -9,6 +9,16 @@ export const CalendarContainer = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 376px) {
+    width: 100%;
+    height: 513px;
+    margin: 0;
+    border-radius: 0 0 24px 24px;
+    box-shadow: none;
+    background: none;
+    display: flex;
+  }
 `;
 
 export const CalendarStyled = styled.div`
@@ -16,6 +26,10 @@ export const CalendarStyled = styled.div`
   padding: 8px 16px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 376px) {
+    padding: 0;
+  }
 `;
 
 export const CalendarTitle = styled.p`
@@ -25,6 +39,11 @@ export const CalendarTitle = styled.p`
   line-height: 1;
   padding: 32px 0;
   margin: 0;
+
+  @media (max-width: 376px) {
+    padding: 20px 10px;
+    padding-top: 0;
+  }
 `;
 
 export const CalendarDaysNames = styled.div`
@@ -52,11 +71,15 @@ export const DayName = styled.div`
 `;
 
 export const CalendarBlock = styled.div`
-  display: block;
-  overflow-y: auto;
-  padding: 8px;
-  scroll-behavior: smooth;
   flex: 1;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  display: block;
+  padding: 8px;
+
+  @media (max-width: 376px) {
+    padding: 10px;
+  }
 `;
 
 export const CalendarContent = styled.div`
@@ -83,10 +106,8 @@ export const CalendarCells = styled.div`
 `;
 
 export const CalendarMonth = styled.div`
-  font-size: 16px;
   font-weight: 600;
   color: #000;
-  margin: 16px 0 8px;
   cursor: default;
   text-align: start;
 
@@ -106,6 +127,7 @@ export const Block = styled.div`
 `;
 
 export const CalendarCell = styled.div`
+  width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -125,6 +147,11 @@ export const CalendarCell = styled.div`
     background: transparent;
     cursor: default;
   `}
+
+  @media (max-width: 376px) {
+    width: 44px;
+    height: 44px;
+  }
 `;
 
 export const SelectedPeriod = styled.div`

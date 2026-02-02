@@ -84,15 +84,13 @@ export default function AuthForm({ isSignUp = false }) {
     try {
       let user;
 
-      if (isSignUp) {
-        // Регистрация
+      if (isSignUp) {        
         user = await signUp({
           login: formData.login.trim(),
           name: formData.name.trim(),
           password: formData.password,
         });
-      } else {
-        // Вход
+      } else {        
         user = await signIn({
           login: formData.login.trim(),
           password: formData.password,
